@@ -16,117 +16,144 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f8faff;
-            color: #202b46;
+            background: #f3f5f9;
+            color: #1c2940;
         }
 
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 22px 8%;
-            background: white;
-            box-shadow: 0 3px 18px #202b4610;
+            padding: 18px 8%;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 1px 0 rgba(35, 52, 88, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
         .logo {
-            font-size: 21px;
+            font-size: 30px;
             font-weight: 800;
-            color: #4169e1;
+            color: #3d7af0;
+            line-height: 1;
         }
 
         .logo span {
-            color: #ffad60;
+            color: #f5ad50;
+        }
+
+        nav .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
         }
 
         nav a {
             text-decoration: none;
-            color: #35415e;
-            margin-left: 25px;
-            font-size: 14px;
+            color: #2d3d5a;
+            font-size: 15px;
             font-weight: 500;
+            transition: opacity 0.2s ease;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
         }
 
         .btn {
-            display: inline-block;
-            background: #4169e1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #3f73ea, #4367d6);
             color: white;
             text-decoration: none;
-            padding: 13px 24px;
-            border-radius: 10px;
+            padding: 16px 26px;
+            border-radius: 12px;
             font-weight: 600;
             border: none;
             cursor: pointer;
+            box-shadow: 0 8px 18px rgba(63, 115, 234, 0.22);
         }
 
         .hero {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 50px;
-            padding: 90px 8%;
-            min-height: 540px;
+            gap: 70px;
+            padding: 90px 8% 70px;
+            min-height: 620px;
+            background: #f3f5f9;
         }
 
         .hero-content {
-            max-width: 590px;
+            max-width: 620px;
         }
 
         .tag {
             display: inline-block;
-            padding: 9px 15px;
-            background: #e8edff;
-            color: #4169e1;
+            padding: 9px 18px;
+            background: rgba(116, 143, 234, 0.13);
+            color: #2d6ae0;
             border-radius: 30px;
             font-size: 13px;
             font-weight: 600;
-            margin-bottom: 24px;
+            margin-bottom: 30px;
         }
 
         h1 {
-            font-size: clamp(34px, 4vw, 52px);
-            line-height: 1.25;
-            margin-bottom: 22px;
+            font-size: clamp(48px, 5vw, 74px);
+            line-height: 0.98;
+            margin-bottom: 28px;
+            letter-spacing: -0.06em;
         }
 
         h1 span {
-            color: #4169e1;
+            display: block;
+            color: #3d7af0;
+            margin-top: 10px;
         }
 
         .hero p {
             color: #68738b;
-            font-size: 15px;
-            line-height: 1.9;
-            margin-bottom: 30px;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 36px;
+            max-width: 560px;
         }
 
         .hero-visual {
-            width: 390px;
-            min-height: 330px;
+            width: 430px;
+            min-height: 340px;
             flex-shrink: 0;
-            border-radius: 35px;
-            background: linear-gradient(135deg, #dfe7ff, #ffe7d2);
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(217, 228, 255, 0.7), rgba(248, 227, 208, 0.75));
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 30px;
+            padding: 28px 28px 20px;
+            box-shadow: inset 0 0 0 1px rgba(138, 152, 184, 0.12);
         }
 
         .hero-visual .emoji {
-            font-size: 100px;
-            margin-bottom: 20px;
+            font-size: 110px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 10px 18px rgba(61, 122, 240, 0.08));
         }
 
         .hero-visual h3 {
-            font-size: 20px;
-            margin-bottom: 8px;
+            font-size: 23px;
+            margin-bottom: 12px;
+            line-height: 1.2;
         }
 
         .hero-visual p {
-            font-size: 13px;
+            font-size: 14px;
             margin: 0;
+            line-height: 1.6;
+            color: #556179;
         }
 
         .features {
@@ -252,7 +279,7 @@
     <nav>
         <div class="logo">E-Training<span>.</span></div>
 
-        <div>
+        <div class="nav-links">
             <a href="#beranda">Beranda</a>
             <a href="#fitur">Fitur</a>
             <a href="#tentang">Tentang</a>
