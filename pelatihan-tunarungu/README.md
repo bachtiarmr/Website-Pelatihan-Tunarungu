@@ -64,3 +64,20 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Menyiapkan akun admin
+
+Jalankan migrasi agar kolom `role` tersedia, lalu atur kredensial admin di file `.env` lokal (`ADMIN_NAME`, `ADMIN_EMAIL`, dan `ADMIN_PASSWORD`):
+
+```bash
+php artisan migrate
+```
+
+Setelah itu, jalankan seeder admin:
+
+```bash
+php artisan config:clear
+php artisan db:seed --class="Database\Seeders\AdminUserSeeder"
+```
+
+Seeder membuat akun dengan role `admin` dan memperbarui akun yang sudah ada dengan email tersebut. Gunakan password pribadi yang kuat; jangan masukkan kredensial ke Git. Login melalui `/login`, dan akun admin akan diarahkan ke `/admin`.

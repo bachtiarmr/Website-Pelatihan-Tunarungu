@@ -47,9 +47,9 @@
                 <p>Bergabung untuk mulai belajar</p>
             </div>
 
-            <form action="#" method="POST" id="registerForm">
+            <form action="{{ route('register.process') }}" method="POST" id="registerForm">
 
-        
+                @csrf
 
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
@@ -58,7 +58,7 @@
                         <input
                             type="text"
                             id="nama"
-                            name="nama"
+                            name="name"
                             placeholder="Nama Lengkap"
                             autocomplete="name"
                             required>

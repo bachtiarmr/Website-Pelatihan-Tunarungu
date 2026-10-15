@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Peserta | Web Pelatihan</title>
+    <title>Login | Web Pelatihan</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,6 +68,20 @@
             border-color: #3781e5;
         }
 
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .remember input {
+            width: auto;
+            margin: 0;
+            padding: 0;
+        }
+
         button {
             width: 100%;
             padding: 14px;
@@ -98,11 +112,17 @@
     <main class="login-container">
         <h1>Selamat Datang!</h1>
         <p class="subtitle">
-            Login untuk melanjutkan pelatihanmu.
+            Login untuk melanjutkan ke akunmu.
         </p>
 
-        <form action="#" method="POST">
+        <form action="{{ route('login.process') }}" method="POST">
             @csrf
+
+            @if ($errors->any())
+                <div role="alert" style="margin-bottom: 16px; color: #b42318;">
+                    {{ $errors->first() }}
+                </div>
+            @endif
 
             <label for="email">Email</label>
             <input
@@ -111,6 +131,7 @@
                 name="email"
                 placeholder="Masukkan email"
                 autocomplete="email"
+                value="{{ old('email') }}"
                 required
             >
 
@@ -123,6 +144,11 @@
                 autocomplete="current-password"
                 required
             >
+
+            <label for="remember" class="remember">
+                <input type="checkbox" id="remember" name="remember" value="1">
+                Ingat saya
+            </label>
 
             <button type="submit">Login</button>
         </form>

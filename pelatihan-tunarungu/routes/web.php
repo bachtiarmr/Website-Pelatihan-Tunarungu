@@ -1,34 +1,57 @@
-
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-// Halaman Beranda
+// Halaman utama
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// Halaman Registrasi
-Route::get('/registrasi', function () {
-    return view('auth.register');
-})->name('register');
+// Registrasi peserta
+Route::get('/registrasi', [AuthController::class, 'showRegister'])
+    ->middleware('guest')
+    ->name('register');
 
-// Proses pengiriman formulir registrasi
-Route::post('/registrasi', function () {
-    return 'Formulir registrasi berhasil dikirim!';
-})->name('register.process');
+Route::post('/registrasi', [AuthController::class, 'register'])
+    ->middleware('guest')
+    ->name('register.process');
 
-// Halaman Login
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// Login
+Route::get('/login', [AuthController::class, 'showLogin'])
+    ->middleware('guest')
+    ->name('login');
 
-// Proses Login (tes sementara)
-Route::post('/login', function () {
-    return 'Formulir login berhasil dikirim!';
-})->name('login.process');
+Route::post('/login', [AuthController::class, 'login'])
+    ->middleware('guest')
+    ->name('login.process');
 
-// Dashboard Peserta
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
+
+// Dashboard peserta
 Route::get('/dashboard', function () {
     return view('peserta.dashboard');
-})->name('dashboard');
+})
+    ->middleware(['auth', 'role:peserta'])
+    ->name('dashboard');
+
+// Dashboard admin
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.dashboard');
+
+Route::get('/admin/menu/{menu}', function (string $menu) {
+    abort_unless(
+        in_array($menu, ['peserta', 'materi', 'quiz', 'progres', 'kompetensi', 'laporan', 'pengaturan'], true),
+        404
+    );
+
+    return view('admin.menu', compact('menu'));
+})
+    ->middleware(['auth', 'role:admin'])
+    ->name('admin.menu');
