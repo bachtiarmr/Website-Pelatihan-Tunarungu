@@ -18,57 +18,15 @@
         <!-- BAGIAN KIRI -->
         <section class="welcome-section">
 
-            <div class="illustration">
-                <svg viewBox="0 0 220 170" role="img"
-                     aria-label="Ilustrasi peserta menggunakan bahasa isyarat">
-                    <rect width="220" height="170" rx="14" fill="#E5F2FF"/>
+            
+<div class="illustration">
+    <img
+        src="{{ asset('/image/tunarungu.png') }}"
+        alt="Ilustrasi peserta menggunakan bahasa isyarat"
+        class="register-illustration"
+    >
+</div>
 
-                    <!-- Kepala -->
-                    <circle cx="105" cy="55" r="23" fill="#F6D2B5"
-                            stroke="#174B78" stroke-width="2"/>
-
-                    <!-- Rambut -->
-                    <path d="M82 54 Q78 24 105 28 Q130 28 129 52
-                             L119 44 L92 46 L86 61 Z"
-                          fill="#173D61"/>
-
-                    <!-- Badan -->
-                    <path d="M67 145 Q70 95 91 85 L119 85
-                             Q144 97 149 145 Z"
-                          fill="#2484D8" stroke="#174B78" stroke-width="2"/>
-
-                    <!-- Tangan kiri -->
-                    <path d="M77 99 L57 119 L48 111 L64 87
-                             Q70 81 79 87"
-                          fill="#F6D2B5" stroke="#174B78"
-                          stroke-width="3" stroke-linecap="round"/>
-
-                    <!-- Tangan kanan -->
-                    <path d="M128 96 L143 77 L139 57
-                             M143 77 L153 59 M143 77 L160 66"
-                          fill="none" stroke="#F6D2B5"
-                          stroke-width="8" stroke-linecap="round"/>
-
-                    <path d="M128 96 L143 77 L139 57
-                             M143 77 L153 59 M143 77 L160 66"
-                          fill="none" stroke="#174B78"
-                          stroke-width="2.5" stroke-linecap="round"/>
-
-                    <!-- Mata dan senyum -->
-                    <circle cx="97" cy="54" r="2" fill="#173D61"/>
-                    <circle cx="114" cy="54" r="2" fill="#173D61"/>
-                    <path d="M99 65 Q106 71 114 64"
-                          fill="none" stroke="#173D61"
-                          stroke-width="2" stroke-linecap="round"/>
-
-                    <!-- Simbol aksesibilitas -->
-                    <circle cx="176" cy="35" r="15"
-                            fill="#D0E8FF"/>
-                    <path d="M168 36 L175 43 L185 28"
-                          fill="none" stroke="#1673C9"
-                          stroke-width="3" stroke-linecap="round"/>
-                </svg>
-            </div>
 
             <h1>Belajar Tanpa Batas<br>Raih Masa Depan</h1>
 
@@ -91,7 +49,7 @@
 
             <form action="#" method="POST" id="registerForm">
 
-                @csrf
+        
 
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
@@ -173,7 +131,7 @@
 
                 <p class="login-link">
                     Sudah punya akun?
-                   <a href="{{ route('login') }}">Login</a>
+                    <a href="{{ url('/login') }}">Login</a>
                 </p>
 
             </form>

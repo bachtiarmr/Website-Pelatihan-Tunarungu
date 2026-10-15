@@ -302,7 +302,7 @@
                 materi interaktif, dan video dengan subtitle.
             </p>
 
-            <a href="{{ route('register') }}" class="btn">
+            <a href="{{ route('login') }}" class="btn">
                 Mulai Belajar Sekarang →
             </a>
         </div>
