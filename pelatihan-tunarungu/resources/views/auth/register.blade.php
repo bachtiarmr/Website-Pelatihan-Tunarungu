@@ -21,7 +21,7 @@
             
 <div class="illustration">
     <img
-        src="{{ asset('/image/tunarungu.png') }}"
+        src="{{ asset('image/tunarungu.png') }}"
         alt="Ilustrasi peserta menggunakan bahasa isyarat"
         class="register-illustration"
     >
@@ -47,9 +47,9 @@
                 <p>Bergabung untuk mulai belajar</p>
             </div>
 
-            <form action="{{ route('register.process') }}" method="POST" id="registerForm">
+            <form action="#" method="POST" id="registerForm">
 
-                @csrf
+        
 
                 <div class="form-group">
                     <label for="nama">Nama Lengkap</label>
@@ -58,7 +58,7 @@
                         <input
                             type="text"
                             id="nama"
-                            name="name"
+                            name="nama"
                             placeholder="Nama Lengkap"
                             autocomplete="name"
                             required>
