@@ -367,7 +367,7 @@
                     <span>Dashboard</span>
                 </a>
 
-                <a href="{{ route('admin.menu', ['menu' => 'peserta']) }}">
+                <a href="{{ route('admin.peserta.index') }}">
                     <i class="fa-solid fa-users"></i>
                     <span>Peserta</span>
                 </a>

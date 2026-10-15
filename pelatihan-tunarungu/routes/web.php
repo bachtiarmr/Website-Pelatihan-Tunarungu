@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PesertaController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,18 @@ Route::get('/admin', function () {
 })
     ->middleware(['auth', 'role:admin'])
     ->name('admin.dashboard');
+
+    Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/peserta', [PesertaController::class, 'index'])
+            ->name('peserta.index');
+
+        Route::get('/peserta/{pesertum}', [PesertaController::class, 'show'])
+            ->whereNumber('pesertum')
+            ->name('peserta.show');
+    });
 
 Route::get('/admin/menu/{menu}', function (string $menu) {
     abort_unless(
