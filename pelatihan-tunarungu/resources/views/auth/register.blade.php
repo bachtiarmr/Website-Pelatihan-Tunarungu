@@ -173,7 +173,7 @@
 
                 <p class="login-link">
                     Sudah punya akun?
-                    <a href="{{ url('/login') }}">Login</a>
+                   <a href="{{ route('login') }}">Login</a>
                 </p>
 
             </form>

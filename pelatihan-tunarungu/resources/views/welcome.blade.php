@@ -283,7 +283,7 @@
             <a href="#beranda">Beranda</a>
             <a href="#fitur">Fitur</a>
             <a href="#tentang">Tentang</a>
-            <a href="{{ url('/register') }}" class="btn">Daftar</a>
+            <a href="{{ route('register') }}" class="btn">Daftar</a>
         </div>
     </nav>
 
@@ -302,7 +302,7 @@
                 materi interaktif, dan video dengan subtitle.
             </p>
 
-            <a href="{{ url('/register') }}" class="btn">
+            <a href="{{ route('register') }}" class="btn">
                 Mulai Belajar Sekarang →
             </a>
         </div>
@@ -353,7 +353,7 @@
     <section class="cta" id="tentang">
         <h2>Siap Mengembangkan Potensimu?</h2>
         <p>Mulai perjalanan belajar dan tingkatkan kompetensimu hari ini.</p>
-        <a href="{{ url('/register') }}" class="btn">Gabung Sekarang</a>
+        <a href="{{ route('register') }}" class="btn">Gabung Sekarang</a>
     </section>
 
     <footer>
