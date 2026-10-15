@@ -76,15 +76,31 @@
             box-shadow: 0 8px 18px rgba(63, 115, 234, 0.22);
         }
 
+        
         .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 70px;
-            padding: 90px 8% 70px;
-            min-height: 620px;
-            background: #f3f5f9;
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 70px;
+
+    padding: 90px 8% 70px;
+    min-height: 620px;
+
+    background:
+        linear-gradient(
+            rgba(243, 245, 249, 0.78),
+            rgba(243, 245, 249, 0.78)
+        ),
+        url("{{ asset('image/background.jpg') }}");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
         }
+
 
         .hero-content {
             max-width: 620px;
