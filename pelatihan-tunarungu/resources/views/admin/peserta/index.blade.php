@@ -1,194 +1,226 @@
+@extends('admin.layout')
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Peserta</title>
+@section('title', 'Data Peserta - Web Pelatihan')
 
-    <style>
-        * {
-            box-sizing: border-box;
+@section('content')
+
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .page-description {
+        color: #687f96;
+        margin-top: 7px;
+        font-size: 12px;
+    }
+
+    .btn-back {
+        display: inline-block;
+        padding: 10px 14px;
+        border-radius: 7px;
+        background: #e7f0fc;
+        color: #2866a5;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .data-card {
+        background: #fff;
+        padding: 20px;
+        border: 1px solid #e7eef6;
+        border-radius: 10px;
+        box-shadow: 0 3px 12px #00000008;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .search-form input {
+        flex: 1;
+        min-width: 0;
+        padding: 11px 13px;
+        border: 1px solid #d6e0ec;
+        border-radius: 7px;
+        font-family: inherit;
+        font-size: 12px;
+        outline: none;
+    }
+
+    .search-form input:focus {
+        border-color: #3985d8;
+    }
+
+    .btn-search {
+        padding: 10px 16px;
+        border: none;
+        border-radius: 7px;
+        background: #327fc7;
+        color: white;
+        cursor: pointer;
+        font-family: inherit;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    .participant-table {
+        width: 100%;
+        border-collapse: collapse;
+        white-space: nowrap;
+    }
+
+    .participant-table th,
+    .participant-table td {
+        padding: 13px 12px;
+        text-align: left;
+        border-bottom: 1px solid #edf1f6;
+    }
+
+    .participant-table th {
+        background: #f3f7fc;
+        color: #45627e;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .participant-table td {
+        color: #536b83;
+        font-size: 12px;
+    }
+
+    .participant-table tbody tr:hover {
+        background: #f8fbff;
+    }
+
+    .btn-detail {
+        display: inline-block;
+        padding: 7px 12px;
+        background: #327fc7;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 11px;
+    }
+
+    .empty-message {
+        text-align: center !important;
+        padding: 28px !important;
+        color: #8293a5 !important;
+    }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+    .pagination nav p {
+        font-size: 12px;
+        color: #687f96;
+    }
+
+    @media (max-width: 600px) {
+        .data-card {
+            padding: 12px;
         }
 
-        body {
-            margin: 0;
-            padding: 30px;
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            color: #263248;
+        .page-header h1 {
+            font-size: 18px;
         }
+    }
+</style>
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            margin: 0 0 8px;
-        }
-
-        .muted {
-            color: #68758a;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 10px 16px;
-            border: none;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .card {
-            background: white;
-            padding: 22px;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #0000000a;
-        }
-
-        .search {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        input {
-            width: 100%;
-            padding: 11px;
-            border: 1px solid #d6deea;
-            border-radius: 8px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 14px;
-            text-align: left;
-            border-bottom: 1px solid #edf0f5;
-        }
-
-        th {
-            background: #f8fafc;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 20px;
-            background: #dcfce7;
-            color: #166534;
-            font-size: 12px;
-        }
-
-        .pagination {
-            margin-top: 20px;
-        }
-
-        @media (max-width: 600px) {
-            body {
-                padding: 15px;
-            }
-
-            .search {
-                flex-direction: column;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <div>
-                <h1>Data Peserta</h1>
-                <p class="muted">Kelola akun peserta pelatihan tunarungu.</p>
-            </div>
-
-            <a href="{{ route('admin.dashboard') }}" class="button">
-                Kembali ke Dashboard
-            </a>
-        </div>
-
-        <div class="card">
-            <form action="{{ route('admin.peserta.index') }}" method="GET">
-    <input
-        type="search"
-        name="cari"
-        placeholder="Cari nama atau email..."
-        value="{{ request('cari') }}"
-        aria-label="Cari peserta">
-
-    <button type="submit">
-        <i class="fa-solid fa-magnifying-glass"></i>
-    </button>
-</form>
-
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Nama Peserta</th>
-                            <th>Email</th>
-                            <th>Tanggal Daftar</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        @forelse ($peserta as $item)
-                            <tr>
-                                <td>
-                                    {{ $peserta->firstItem() + $loop->index }}
-                                </td>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->email }}</td>
-                                <td>
-                                    {{ $item->created_at?->format('d-m-Y') ?? '-' }}
-                                </td>
-                                <td>
-                                    <a
-                                        href="{{ route('admin.peserta.show', $item->id) }}"
-                                        class="button"
-                                    >
-                                        Detail
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" style="text-align:center;">
-                                    Belum ada peserta yang terdaftar.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="pagination">
-                {{ $peserta->links() }}
-            </div>
-        </div>
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Data Peserta</h1>
+        <p class="page-description">
+            Kelola akun peserta pelatihan tunarungu.
+        </p>
     </div>
-</body>
-</html>
+
+    <a href="{{ route('admin.dashboard') }}" class="btn-back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Dashboard
+    </a>
+</div>
+
+<div class="data-card">
+
+    <form
+        action="{{ route('admin.peserta.index') }}"
+        method="GET"
+        class="search-form"
+    >
+        <input
+            type="search"
+            name="cari"
+            placeholder="Cari nama atau email peserta..."
+            value="{{ request('cari') }}"
+            aria-label="Cari peserta"
+        >
+
+        <button type="submit" class="btn-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            Cari
+        </button>
+    </form>
+
+    <div class="table-wrapper">
+        <table class="participant-table">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nama Peserta</th>
+                    <th>Email</th>
+                    <th>Tanggal Daftar</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @forelse ($peserta as $item)
+                    <tr>
+                        <td>{{ $peserta->firstItem() + $loop->index }}</td>
+                        <td>{{ $item->name }}</td>
+                        <td>{{ $item->email }}</td>
+                        <td>
+                            {{ $item->created_at?->format('d-m-Y') ?? '-' }}
+                        </td>
+                        <td>
+                            <a
+                                href="{{ route('admin.peserta.show', $item->id) }}"
+                                class="btn-detail"
+                            >
+                                <i class="fa-regular fa-eye"></i>
+                                Detail
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="empty-message">
+                            <i class="fa-solid fa-users"></i>
+                            <p>Belum ada peserta yang terdaftar.</p>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pagination">
+        {{ $peserta->links() }}
+    </div>
+
+</div>
+
+@endsection
