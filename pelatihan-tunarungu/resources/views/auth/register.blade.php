@@ -16,7 +16,95 @@
     >
 
     <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+
+    <style>
+        /* Memastikan seluruh ikon di dalam input berada pada posisi yang benar */
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .input-wrapper > svg:first-child {
+            position: absolute;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            pointer-events: none;
+            color: #6685a5;
+            z-index: 1;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        /* Ruang untuk ikon gembok di kiri */
+        .input-wrapper input[type="text"],
+        .input-wrapper input[type="email"],
+        .input-wrapper input[type="tel"],
+        .input-wrapper input[type="password"] {
+            padding-left: 44px;
+        }
+
+        /* Tombol mata */
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: #6685a5;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .password-toggle:hover {
+            color: #327fe0;
+            background: #f0f6ff;
+        }
+
+        .password-toggle:focus-visible {
+            outline: 2px solid #327fe0;
+            outline-offset: 2px;
+        }
+
+        .password-toggle svg {
+            position: static;
+            width: 19px;
+            height: 19px;
+            flex-shrink: 0;
+            color: inherit;
+            pointer-events: none;
+        }
+
+        /* Mencegah tulisan password bertabrakan dengan tombol mata */
+        .input-wrapper input.password-input {
+            padding-left: 44px;
+            padding-right: 48px;
+        }
+
+        @media (max-width: 600px) {
+            .password-toggle {
+                right: 8px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
     <main class="register-container">
@@ -26,7 +114,7 @@
 
             <div class="illustration">
                 <img
-                    src="{{ asset('image/tunarungu.png') }}"
+                    src="{{ asset('image/deaf.jpg') }}"
                     alt="Ilustrasi peserta menggunakan bahasa isyarat"
                     class="register-illustration"
                 >
@@ -200,6 +288,7 @@
                         </svg>
 
                         <input
+                            class="password-input"
                             type="password"
                             id="password"
                             name="password"
@@ -208,6 +297,28 @@
                             minlength="8"
                             required
                         >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('password', this)"
+                            aria-label="Tampilkan password"
+                            aria-pressed="false"
+                        >
+                            <svg
+                                class="eye-icon"
+                                aria-hidden="true"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
 
                     </div>
                 </div>
@@ -235,6 +346,7 @@
                         </svg>
 
                         <input
+                            class="password-input"
                             type="password"
                             id="password_confirmation"
                             name="password_confirmation"
@@ -243,6 +355,28 @@
                             minlength="8"
                             required
                         >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword('password_confirmation', this)"
+                            aria-label="Tampilkan konfirmasi password"
+                            aria-pressed="false"
+                        >
+                            <svg
+                                class="eye-icon"
+                                aria-hidden="true"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
 
                     </div>
                 </div>
@@ -263,6 +397,48 @@
         </section>
 
     </main>
+
+    <script>
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('.eye-icon');
+
+            if (!input || !icon) {
+                return;
+            }
+
+            const showPassword = input.type === 'password';
+
+            input.type = showPassword ? 'text' : 'password';
+
+            if (showPassword) {
+                // Ikon mata dicoret
+                icon.innerHTML = `
+                    <path d="M3 3l18 18"/>
+                    <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/>
+                    <path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.4 0 10 7 10 7a15.7 15.7 0 0 1-4 4.7"/>
+                    <path d="M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1 0 2-.2 2.9-.5"/>
+                `;
+
+                button.setAttribute('aria-pressed', 'true');
+                button.setAttribute('aria-label', 'Sembunyikan password');
+            } else {
+                // Ikon mata normal
+                icon.innerHTML = `
+                    <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                `;
+
+                button.setAttribute('aria-pressed', 'false');
+                button.setAttribute(
+                    'aria-label',
+                    inputId === 'password'
+                        ? 'Tampilkan password'
+                        : 'Tampilkan konfirmasi password'
+                );
+            }
+        }
+    </script>
 
 </body>
 </html>

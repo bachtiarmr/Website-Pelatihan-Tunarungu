@@ -7,10 +7,7 @@
 <style>
     .page-header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
         margin-bottom: 22px;
     }
 
@@ -18,17 +15,6 @@
         color: #687f96;
         margin-top: 7px;
         font-size: 12px;
-    }
-
-    .btn-back {
-        display: inline-block;
-        padding: 10px 14px;
-        border-radius: 7px;
-        background: #e7f0fc;
-        color: #2866a5;
-        text-decoration: none;
-        font-size: 12px;
-        font-weight: 600;
     }
 
     .data-card {
@@ -47,27 +33,28 @@
 
     .search-form input {
         flex: 1;
+        width: 100%;
         min-width: 0;
-        padding: 11px 13px;
+        box-sizing: border-box;
+        padding: 12px 15px;
         border: 1px solid #d6e0ec;
         border-radius: 7px;
         font-family: inherit;
-        font-size: 12px;
+        font-size: 13px;
         outline: none;
+        transition: border-color .2s, box-shadow .2s;
     }
 
     .search-form input:focus {
         border-color: #3985d8;
+        box-shadow: 0 0 0 3px #3985d81a;
     }
 
-    .btn-search {
-        padding: 10px 16px;
-        border: none;
-        border-radius: 7px;
-        background: #327fc7;
-        color: white;
-        cursor: pointer;
-        font-family: inherit;
+    .search-status {
+        min-height: 18px;
+        margin: -10px 0 12px;
+        color: #687f96;
+        font-size: 11px;
     }
 
     .table-wrapper {
@@ -82,7 +69,7 @@
 
     .participant-table th,
     .participant-table td {
-        padding: 13px 12px;
+        padding: 15px 13px;
         text-align: left;
         border-bottom: 1px solid #edf1f6;
     }
@@ -90,13 +77,13 @@
     .participant-table th {
         background: #f3f7fc;
         color: #45627e;
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 600;
     }
 
     .participant-table td {
         color: #536b83;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .participant-table tbody tr:hover {
@@ -105,18 +92,27 @@
 
     .btn-detail {
         display: inline-block;
-        padding: 7px 12px;
+        padding: 9px 13px;
         background: #327fc7;
         color: #fff;
-        border-radius: 6px;
+        border-radius: 7px;
         text-decoration: none;
-        font-size: 11px;
+        font-size: 12px;
+    }
+
+    .btn-detail:hover {
+        background: #246bad;
+        color: #fff;
     }
 
     .empty-message {
         text-align: center !important;
-        padding: 28px !important;
+        padding: 30px !important;
         color: #8293a5 !important;
+    }
+
+    .empty-message p {
+        margin: 8px 0 0;
     }
 
     .pagination {
@@ -128,6 +124,15 @@
         color: #687f96;
     }
 
+    #hasilPeserta {
+        transition: opacity .15s;
+    }
+
+    #hasilPeserta.loading {
+        opacity: .5;
+        pointer-events: none;
+    }
+
     @media (max-width: 600px) {
         .data-card {
             padding: 12px;
@@ -135,6 +140,10 @@
 
         .page-header h1 {
             font-size: 18px;
+        }
+
+        .search-form input {
+            font-size: 12px;
         }
     }
 </style>
@@ -146,81 +155,147 @@
             Kelola akun peserta pelatihan tunarungu.
         </p>
     </div>
-
-    <a href="{{ route('admin.dashboard') }}" class="btn-back">
-        <i class="fa-solid fa-arrow-left"></i>
-        Dashboard
-    </a>
 </div>
 
 <div class="data-card">
 
-    <form
-        action="{{ route('admin.peserta.index') }}"
-        method="GET"
-        class="search-form"
-    >
+    <div class="search-form">
         <input
             type="search"
-            name="cari"
+            id="cariPeserta"
             placeholder="Cari nama atau email peserta..."
             value="{{ request('cari') }}"
-            aria-label="Cari peserta"
+            aria-label="Cari nama atau email peserta"
+            autocomplete="off"
         >
-
-        <button type="submit" class="btn-search">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            Cari
-        </button>
-    </form>
-
-    <div class="table-wrapper">
-        <table class="participant-table">
-            <thead>
-                <tr>
-                    <th>No.</th>
-                    <th>Nama Peserta</th>
-                    <th>Email</th>
-                    <th>Tanggal Daftar</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @forelse ($peserta as $item)
-                    <tr>
-                        <td>{{ $peserta->firstItem() + $loop->index }}</td>
-                        <td>{{ $item->name }}</td>
-                        <td>{{ $item->email }}</td>
-                        <td>
-                            {{ $item->created_at?->format('d-m-Y') ?? '-' }}
-                        </td>
-                        <td>
-                            <a
-                                href="{{ route('admin.peserta.show', $item->id) }}"
-                                class="btn-detail"
-                            >
-                                <i class="fa-regular fa-eye"></i>
-                                Detail
-                            </a>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="empty-message">
-                            <i class="fa-solid fa-users"></i>
-                            <p>Belum ada peserta yang terdaftar.</p>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
     </div>
 
-    <div class="pagination">
-        {{ $peserta->links() }}
+    <div
+        id="statusPencarian"
+        class="search-status"
+        role="status"
+        aria-live="polite"
+    ></div>
+
+    <div id="hasilPeserta">
+        @include('admin.peserta.partials.table')
     </div>
 
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('cariPeserta');
+    const hasil = document.getElementById('hasilPeserta');
+    const status = document.getElementById('statusPencarian');
+
+    if (!input || !hasil || !status) return;
+
+    let timer = null;
+    let controller = null;
+
+    async function cariPeserta(url) {
+        if (controller) {
+            controller.abort();
+        }
+
+        const requestController = new AbortController();
+        controller = requestController;
+
+        hasil.classList.add('loading');
+        status.textContent = 'Mencari peserta...';
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'text/html'
+                },
+                signal: requestController.signal
+            });
+
+            if (!response.ok) {
+                throw new Error('Gagal mengambil data peserta.');
+            }
+
+            const html = await response.text();
+
+            if (controller !== requestController) return;
+
+            hasil.innerHTML = html;
+
+            status.textContent = input.value.trim()
+                ? 'Hasil pencarian diperbarui.'
+                : '';
+
+            const currentUrl = new URL(window.location.href);
+            const keyword = input.value.trim();
+
+            if (keyword) {
+                currentUrl.searchParams.set('cari', keyword);
+            } else {
+                currentUrl.searchParams.delete('cari');
+            }
+
+            currentUrl.searchParams.delete('page');
+
+            window.history.replaceState({}, '', currentUrl);
+
+        } catch (error) {
+            if (error.name !== 'AbortError') {
+                status.textContent =
+                    'Terjadi kesalahan. Silakan coba lagi.';
+                console.error(error);
+            }
+        } finally {
+            if (controller === requestController) {
+                controller = null;
+                hasil.classList.remove('loading');
+            }
+        }
+    }
+
+    function buatUrl(page = null) {
+        const url = new URL(
+            '{{ route("admin.peserta.index") }}',
+            window.location.origin
+        );
+
+        const keyword = input.value.trim();
+
+        if (keyword) {
+            url.searchParams.set('cari', keyword);
+        }
+
+        if (page) {
+            url.searchParams.set('page', page);
+        }
+
+        return url.toString();
+    }
+
+    input.addEventListener('input', function () {
+        clearTimeout(timer);
+
+        timer = setTimeout(function () {
+            cariPeserta(buatUrl());
+        }, 300);
+    });
+
+    hasil.addEventListener('click', function (event) {
+        const link = event.target.closest('.pagination a');
+
+        if (!link) return;
+
+        event.preventDefault();
+
+        const linkUrl = new URL(link.href);
+        const page = linkUrl.searchParams.get('page');
+
+        cariPeserta(buatUrl(page));
+    });
+});
+</script>
 
 @endsection

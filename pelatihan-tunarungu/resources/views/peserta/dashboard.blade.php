@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -26,10 +25,25 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text);
-            background: var(--bg);
+            min-height: 100vh;
+            background-color: var(--bg);
+            background-image:
+                linear-gradient(
+                    rgba(245, 249, 255, 0.78),
+                    rgba(245, 249, 255, 0.86)
+                ),
+                url('{{ asset('image/background2.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
         }
 
         button, a {
@@ -41,6 +55,16 @@
             color: inherit;
         }
 
+        /* ===== Ikon SVG (umum) ===== */
+        svg.icon {
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
         .topbar {
             min-height: 78px;
             padding: 14px 35px;
@@ -49,7 +73,7 @@
             align-items: center;
             gap: 15px;
             color: white;
-            background: linear-gradient(110deg, #3976c6, #4687d4);
+            background: linear-gradient(110deg, #2d6ae0, #4687d4);
             box-shadow: 0 3px 12px #183e741a;
             position: sticky;
             top: 0;
@@ -71,7 +95,11 @@
             place-items: center;
             border: 2px solid white;
             border-radius: 50%;
-            font-size: 23px;
+        }
+
+        .brand-icon svg {
+            width: 24px;
+            height: 24px;
         }
 
         .profile {
@@ -90,7 +118,16 @@
             display: grid;
             place-items: center;
             border-radius: 50%;
-            font-size: 22px;
+        }
+
+        .profile-avatar svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .profile-chevron {
+            width: 16px;
+            height: 16px;
         }
 
         .layout {
@@ -102,8 +139,10 @@
             width: 255px;
             flex-shrink: 0;
             padding: 32px 18px 22px;
-            background: #f9fcff;
-            border-right: 1px solid var(--border);
+            background: rgba(249, 252, 255, 0.90);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(220, 233, 251, 0.9);
             display: flex;
             flex-direction: column;
         }
@@ -139,8 +178,15 @@
 
         .nav-icon {
             width: 24px;
-            text-align: center;
-            font-size: 21px;
+            height: 24px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+
+        .nav-icon svg {
+            width: 22px;
+            height: 22px;
         }
 
         .sidebar-bottom {
@@ -149,7 +195,6 @@
             border-top: 1px solid var(--border);
         }
 
-        /* Form logout */
         .logout-form {
             width: 100%;
         }
@@ -171,6 +216,7 @@
             flex: 1;
             min-width: 0;
             padding: 42px 38px;
+            background: rgba(245, 249, 255, 0.20);
         }
 
         .welcome {
@@ -213,27 +259,30 @@
             padding: 25px 24px;
             border: 1px solid var(--border);
             border-radius: 15px;
-            background: linear-gradient(145deg, #ffffff, #eef6ff);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
+            box-shadow: 0 4px 18px rgba(32, 76, 128, 0.04);
             transition: transform .2s, box-shadow .2s;
         }
 
         .stat-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 24px #244d7a0c;
+            box-shadow: 0 8px 24px #244d7a12;
         }
 
         .stat-card.green {
-            background: linear-gradient(145deg, #ffffff, #eafbf7);
+            background: rgba(234, 251, 247, 0.90);
             border-color: #d5f2eb;
         }
 
         .stat-card.purple {
-            background: linear-gradient(145deg, #ffffff, #f2efff);
+            background: rgba(242, 239, 255, 0.90);
             border-color: #e7e0ff;
         }
 
         .stat-card.orange {
-            background: linear-gradient(145deg, #ffffff, #fff8e9);
+            background: rgba(255, 248, 233, 0.92);
             border-color: #f8ead0;
         }
 
@@ -245,8 +294,12 @@
             color: #2476dc;
             display: grid;
             place-items: center;
-            font-size: 26px;
             margin-bottom: 17px;
+        }
+
+        .stat-icon svg {
+            width: 26px;
+            height: 26px;
         }
 
         .green .stat-icon {
@@ -295,10 +348,12 @@
             align-items: center;
             gap: 30px;
             padding: 27px;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(7px);
+            -webkit-backdrop-filter: blur(7px);
             border: 1px solid #d9e8fc;
             border-radius: 16px;
-            box-shadow: 0 4px 16px #2e5b8b06;
+            box-shadow: 0 4px 16px #2e5b8b0a;
         }
 
         .course-image {
@@ -307,13 +362,21 @@
             flex-shrink: 0;
             border-radius: 12px;
             background: #d8f5ff;
+            color: #2476dc;
             display: grid;
             place-items: center;
             overflow: hidden;
         }
 
         .course-placeholder {
-            font-size: 65px;
+            display: grid;
+            place-items: center;
+        }
+
+        .course-placeholder svg {
+            width: 64px;
+            height: 64px;
+            stroke-width: 1.5;
         }
 
         .course-info {
@@ -375,6 +438,14 @@
             transition: .2s;
         }
 
+        .continue-button svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            stroke: currentColor;
+            stroke-width: 1.5;
+        }
+
         .continue-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 14px #2878e844;
@@ -395,6 +466,10 @@
         }
 
         @media (max-width: 760px) {
+            body {
+                background-attachment: scroll;
+            }
+
             .topbar {
                 min-height: 68px;
                 padding: 12px 17px;
@@ -407,7 +482,11 @@
             .brand-icon {
                 width: 36px;
                 height: 36px;
-                font-size: 18px;
+            }
+
+            .brand-icon svg {
+                width: 20px;
+                height: 20px;
             }
 
             .profile {
@@ -418,7 +497,11 @@
             .profile-avatar {
                 width: 34px;
                 height: 34px;
-                font-size: 17px;
+            }
+
+            .profile-avatar svg {
+                width: 18px;
+                height: 18px;
             }
 
             .layout {
@@ -447,11 +530,15 @@
             }
 
             .nav-icon {
-                font-size: 17px;
-                width: auto;
+                width: 20px;
+                height: 20px;
             }
 
-            /* Logout tetap terlihat di HP */
+            .nav-icon svg {
+                width: 18px;
+                height: 18px;
+            }
+
             .sidebar-bottom {
                 display: block;
                 margin-top: 10px;
@@ -492,8 +579,12 @@
             .stat-icon {
                 width: 43px;
                 height: 43px;
-                font-size: 21px;
                 margin-bottom: 13px;
+            }
+
+            .stat-icon svg {
+                width: 21px;
+                height: 21px;
             }
 
             .stat-label {
@@ -560,14 +651,29 @@
 
     <header class="topbar">
         <div class="brand">
-            <span class="brand-icon">♿</span>
+            <span class="brand-icon">
+                <!-- Topi wisuda -->
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+            </span>
             <span>Web Pelatihan</span>
         </div>
 
         <div class="profile">
-            <div class="profile-avatar">♙</div>
+            <div class="profile-avatar">
+                <!-- User -->
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </div>
             <span>{{ auth()->user()->name }}</span>
-            <span>⌄</span>
+            <!-- Chevron -->
+            <svg class="icon profile-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m6 9 6 6 6-6"/>
+            </svg>
         </div>
     </header>
 
@@ -577,37 +683,70 @@
 
             <nav class="nav-menu">
                 <a href="{{ route('dashboard') }}" class="nav-link active">
-                    <span class="nav-icon">⌂</span>
+                    <span class="nav-icon">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                            <polyline points="9 22 9 12 15 12 15 22"/>
+                        </svg>
+                    </span>
                     <span>Beranda</span>
                 </a>
 
                 <a href="#materi" class="nav-link">
-                    <span class="nav-icon">▣</span>
+                    <span class="nav-icon">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                    </span>
                     <span>Materi</span>
                 </a>
 
                 <a href="#evaluasi" class="nav-link">
-                    <span class="nav-icon">☑</span>
+                    <span class="nav-icon">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                            <path d="m9 14 2 2 4-4"/>
+                        </svg>
+                    </span>
                     <span>Evaluasi</span>
                 </a>
 
                 <a href="#progres" class="nav-link">
-                    <span class="nav-icon">▥</span>
+                    <span class="nav-icon">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 3v18h18"/>
+                            <path d="M18 17V9"/>
+                            <path d="M13 17V5"/>
+                            <path d="M8 17v-3"/>
+                        </svg>
+                    </span>
                     <span>Progres</span>
                 </a>
 
                 <a href="#riwayat" class="nav-link">
-                    <span class="nav-icon">◷</span>
+                    <span class="nav-icon">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                            <path d="M3 3v5h5"/>
+                            <path d="M12 7v5l4 2"/>
+                        </svg>
+                    </span>
                     <span>Riwayat</span>
                 </a>
 
                 <a href="#kompetensi" class="nav-link">
-                    <span class="nav-icon">♙</span>
+                    <span class="nav-icon">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="8" r="6"/>
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                        </svg>
+                    </span>
                     <span>Kompetensi</span>
                 </a>
             </nav>
 
-            <!-- TOMBOL LOGOUT: DESKTOP DAN HP -->
             <div class="sidebar-bottom">
                 <form
                     action="{{ route('logout') }}"
@@ -618,7 +757,13 @@
                     @csrf
 
                     <button type="submit" class="nav-link logout-button">
-                        <span class="nav-icon">⇥</span>
+                        <span class="nav-icon">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                <polyline points="16 17 21 12 16 7"/>
+                                <line x1="21" x2="9" y1="12" y2="12"/>
+                            </svg>
+                        </span>
                         <span>Logout</span>
                     </button>
                 </form>
@@ -628,7 +773,6 @@
 
         <main class="main">
 
-            <!-- Pesan setelah login atau tindakan lainnya -->
             @if (session('success'))
                 <div class="notice" role="status">
                     {{ session('success') }}
@@ -643,28 +787,52 @@
             <section class="stats">
 
                 <div class="stat-card">
-                    <div class="stat-icon">▣</div>
+                    <div class="stat-icon">
+                        <!-- Buku -->
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                    </div>
                     <p class="stat-label">Materi Tersedia</p>
                     <div class="stat-value">5</div>
                     <p class="stat-note">Modul Pelatihan</p>
                 </div>
 
                 <div class="stat-card green">
-                    <div class="stat-icon">☑</div>
+                    <div class="stat-icon">
+                        <!-- Grafik -->
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M3 3v18h18"/>
+                            <path d="m19 9-5 5-4-4-3 3"/>
+                        </svg>
+                    </div>
                     <p class="stat-label">Progres Belajar</p>
                     <div class="stat-value">30%</div>
                     <p class="stat-note">Dari total materi</p>
                 </div>
 
                 <div class="stat-card purple">
-                    <div class="stat-icon">✓</div>
+                    <div class="stat-icon">
+                        <!-- Centang -->
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <path d="m9 11 3 3L22 4"/>
+                        </svg>
+                    </div>
                     <p class="stat-label">Evaluasi Selesai</p>
                     <div class="stat-value">2</div>
                     <p class="stat-note">Dari 5 evaluasi</p>
                 </div>
 
                 <div class="stat-card orange">
-                    <div class="stat-icon">✿</div>
+                    <div class="stat-icon">
+                        <!-- Penghargaan -->
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="8" r="6"/>
+                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+                        </svg>
+                    </div>
                     <p class="stat-label">Kompetensi</p>
                     <div class="stat-value">1</div>
                     <p class="stat-note">Kompetensi diperoleh</p>
@@ -678,13 +846,21 @@
                 <div class="course-card">
 
                     <div class="course-image">
-                        <div class="course-placeholder" aria-label="Ilustrasi belajar">
-                            🎨
+                        <div class="course-placeholder" role="img" aria-label="Ilustrasi belajar">
+                            <!-- Palet warna (desain grafis) -->
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+                                <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+                                <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+                                <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+                                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+                            </svg>
                         </div>
                     </div>
 
                     <div class="course-info">
                         <h3>Dasar-Dasar Desain Grafis</h3>
+
                         <p class="course-category">
                             Kategori: Digital Skill
                         </p>
@@ -699,7 +875,10 @@
                     </div>
 
                     <a href="#materi" class="continue-button">
-                        ▶ Lanjutkan
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <polygon points="6 3 20 12 6 21 6 3"/>
+                        </svg>
+                        <span>Lanjutkan</span>
                     </a>
 
                 </div>

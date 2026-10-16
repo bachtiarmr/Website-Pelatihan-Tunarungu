@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PesertaController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
@@ -14,7 +15,7 @@ Route::get('/', function () {
 
 
 // ========================================
-// REGISTRASI PESERTA
+// REGISTRASI DAN LOGIN
 // ========================================
 Route::middleware('guest')->group(function () {
 
@@ -24,10 +25,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/registrasi', [AuthController::class, 'register'])
         ->name('register.process');
 
-
-    // ========================================
-    // LOGIN
-    // ========================================
     Route::get('/login', [AuthController::class, 'showLogin'])
         ->name('login');
 
@@ -42,7 +39,6 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
-
 
 
 // ========================================
@@ -64,10 +60,8 @@ Route::middleware(['auth', 'role:admin'])
     ->group(function () {
 
         // Dashboard admin
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
-
+        Route::get('/', [DashboardController::class, 'index'])
+            ->name('dashboard');
 
         // Daftar peserta
         Route::get('/peserta', [PesertaController::class, 'index'])
@@ -77,7 +71,6 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/peserta/{pesertum}', [PesertaController::class, 'show'])
             ->whereNumber('pesertum')
             ->name('peserta.show');
-
 
         // Menu admin lainnya
         Route::get('/menu/{menu}', function (string $menu) {

@@ -1,3 +1,4 @@
+
 @extends('admin.layout')
 
 @section('title', 'Dashboard Admin - Web Pelatihan')
@@ -97,14 +98,17 @@
 </style>
 
 <div class="stats">
+
+    {{-- TOTAL PESERTA DARI DATABASE --}}
     <div class="stat-card">
         <div class="stat-title">Total Peserta</div>
         <div class="stat-content">
             <i class="fa-solid fa-user stat-icon"></i>
-            <span class="stat-number">124</span>
+            <span class="stat-number">{{ $totalPeserta }}</span>
         </div>
     </div>
 
+    {{-- MATERI TERSEDIA --}}
     <div class="stat-card">
         <div class="stat-title">Materi Tersedia</div>
         <div class="stat-content">
@@ -113,6 +117,7 @@
         </div>
     </div>
 
+    {{-- PESERTA AKTIF --}}
     <div class="stat-card">
         <div class="stat-title">Peserta Aktif</div>
         <div class="stat-content">
@@ -121,6 +126,7 @@
         </div>
     </div>
 
+    {{-- KOMPETENSI TERSEDIA --}}
     <div class="stat-card">
         <div class="stat-title">Kompetensi Tersedia</div>
         <div class="stat-content">
@@ -128,11 +134,13 @@
             <span class="stat-number">8</span>
         </div>
     </div>
+
 </div>
 
 <h2 class="activity-title">Aktivitas Terbaru</h2>
 
 <div class="activity-list">
+
     <div class="activity-item">
         <div class="activity-icon">
             <i class="fa-solid fa-user"></i>
@@ -162,6 +170,7 @@
             <span class="activity-time">15 menit lalu</span>
         </div>
     </div>
+
 </div>
 
 @endsection

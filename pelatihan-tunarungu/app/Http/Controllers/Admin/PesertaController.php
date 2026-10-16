@@ -8,23 +8,32 @@ use Illuminate\Http\Request;
 
 class PesertaController extends Controller
 {
-    // Menampilkan daftar peserta yang sudah registrasi
     public function index(Request $request)
     {
-        $peserta = User::where('role', 'peserta')
-            ->when($request->filled('cari'), function ($query) use ($request) {
-                $cari = $request->cari;
+        $query = User::where('role', 'peserta');
 
-                $query->where(function ($q) use ($cari) {
-                    $q->where('name', 'like', "%{$cari}%")
-                      ->orWhere('email', 'like', "%{$cari}%");
-                });
-            })
+        if ($request->filled('cari')) {
+            $cari = $request->input('cari');
+
+            $query->where(function ($q) use ($cari) {
+                $q->where('name', 'like', "%{$cari}%")
+                  ->orWhere('email', 'like', "%{$cari}%");
+            });
+        }
+
+        $peserta = $query
             ->latest()
             ->paginate(10)
             ->withQueryString();
 
         $totalPeserta = User::where('role', 'peserta')->count();
+
+        if ($request->ajax()) {
+            return view(
+                'admin.peserta.partials.table',
+                compact('peserta')
+            );
+        }
 
         return view('admin.peserta.index', compact(
             'peserta',
@@ -32,7 +41,6 @@ class PesertaController extends Controller
         ));
     }
 
-    // Menampilkan detail peserta
     public function show(User $pesertum)
     {
         abort_unless($pesertum->role === 'peserta', 404);
