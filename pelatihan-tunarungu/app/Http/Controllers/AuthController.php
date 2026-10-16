@@ -11,6 +11,10 @@ class AuthController extends Controller
     // Menampilkan halaman registrasi
     public function showRegister()
     {
+        if (Auth::check()) {
+            return $this->redirectByRole();
+        }
+
         return view('auth.register');
     }
 
@@ -20,27 +24,38 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
+            'nomor_hp' => 'required|string|max:20',
             'password' => 'required|string|min:8|confirmed',
+        ], [
+            'name.required' => 'Nama lengkap wajib diisi.',
+            'email.required' => 'Email wajib diisi.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'nomor_hp.required' => 'Nomor HP wajib diisi.',
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
         ]);
 
-        $user = User::create([
+        // Membuat akun peserta baru
+        User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'nomor_hp' => $data['nomor_hp'],
             'password' => $data['password'],
             'role' => 'peserta',
         ]);
 
-        Auth::login($user);
-        $request->session()->regenerate();
-
-        return redirect()->route('dashboard')
-            ->with('success', 'Registrasi berhasil!');
+        // Setelah daftar, arahkan ke halaman login
+        // Peserta harus login secara manual
+        return redirect()->route('login')
+            ->with(
+                'success',
+                'Registrasi berhasil! Silakan login menggunakan akun kamu.'
+            );
     }
 
     // Menampilkan halaman login
     public function showLogin()
     {
-        // Jika sudah login, arahkan sesuai role
         if (Auth::check()) {
             return $this->redirectByRole();
         }
@@ -56,7 +71,11 @@ class AuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        // Memeriksa email dan password
+        if (!Auth::attempt(
+            $credentials,
+            $request->boolean('remember')
+        )) {
             return back()
                 ->withErrors([
                     'email' => 'Email atau password salah.',
@@ -64,20 +83,20 @@ class AuthController extends Controller
                 ->onlyInput('email');
         }
 
-        // Membuat ulang session setelah login
+        // Memperbarui session setelah login
         $request->session()->regenerate();
 
-        // Arahkan berdasarkan role pengguna
+        // Mengarahkan pengguna sesuai role
         return $this->redirectByRole()
             ->with('success', 'Login berhasil!');
     }
 
-    // Pengalihan berdasarkan role
+    // Pengalihan berdasarkan role pengguna
     private function redirectByRole()
     {
         $user = Auth::user();
 
-        if (! $user) {
+        if (!$user) {
             return redirect()->route('login');
         }
 
@@ -88,7 +107,7 @@ class AuthController extends Controller
         return redirect()->route('dashboard');
     }
 
-    // Logout
+    // Logout pengguna
     public function logout(Request $request)
     {
         Auth::logout();
@@ -96,7 +115,8 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')
+        // Setelah logout, kembali ke halaman utama
+        return redirect('/')
             ->with('success', 'Kamu berhasil logout.');
     }
 }

@@ -12,12 +12,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* RESET */
         * {
             box-sizing: border-box;
         }
 
-        /* BACKGROUND HALAMAN */
         body {
             margin: 0;
             min-height: 100vh;
@@ -42,7 +40,6 @@
             color: #174b78;
         }
 
-        /* KOTAK LOGIN */
         .login-container {
             width: 100%;
             max-width: 420px;
@@ -56,7 +53,6 @@
             backdrop-filter: blur(8px);
         }
 
-        /* JUDUL */
         h1 {
             margin: 0 0 10px;
             font-size: 30px;
@@ -70,14 +66,12 @@
             line-height: 1.6;
         }
 
-        /* LABEL */
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
         }
 
-        /* INPUT EMAIL DAN PASSWORD */
         input[type="email"],
         input[type="password"],
         input[type="text"] {
@@ -103,7 +97,6 @@
             box-shadow: 0 0 0 3px rgba(55, 129, 229, 0.12);
         }
 
-        /* PEMBUNGKUS INPUT PASSWORD */
         .password-wrapper {
             position: relative;
             width: 100%;
@@ -113,7 +106,6 @@
             padding-right: 48px;
         }
 
-        /* TOMBOL IKON MATA */
         .toggle-password {
             position: absolute;
             top: 0;
@@ -153,7 +145,6 @@
             outline-offset: -3px;
         }
 
-        /* INGAT SAYA */
         .remember {
             display: flex;
             align-items: center;
@@ -171,7 +162,6 @@
             cursor: pointer;
         }
 
-        /* TOMBOL LOGIN */
         .login-button {
             width: 100%;
             padding: 13px;
@@ -201,6 +191,18 @@
             outline-offset: 3px;
         }
 
+        /* PESAN REGISTRASI / LOGIN BERHASIL */
+        .success-message {
+            margin-bottom: 18px;
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
         /* PESAN ERROR */
         .error-message {
             margin-bottom: 16px;
@@ -209,9 +211,9 @@
             background: #fff0f0;
             color: #b42318;
             font-size: 14px;
+            line-height: 1.5;
         }
 
-        /* LINK BAGIAN BAWAH */
         .footer {
             margin-top: 22px;
             text-align: center;
@@ -230,7 +232,6 @@
             text-decoration: underline;
         }
 
-        /* TAMPILAN HP */
         @media (max-width: 480px) {
             body {
                 padding: 16px;
@@ -264,16 +265,24 @@
             Login untuk melanjutkan ke akunmu.
         </p>
 
+        {{-- PESAN BERHASIL --}}
+        @if (session('success'))
+            <div role="status" class="success-message">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        {{-- PESAN ERROR --}}
+        @if ($errors->any())
+            <div role="alert" class="error-message">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
         <form action="{{ route('login.process') }}" method="POST">
             @csrf
 
-            @if ($errors->any())
-                <div role="alert" class="error-message">
-                    {{ $errors->first() }}
-                </div>
-            @endif
-
-            <!-- EMAIL -->
+            {{-- EMAIL --}}
             <label for="email">Email</label>
 
             <input
@@ -286,7 +295,7 @@
                 required
             >
 
-            <!-- PASSWORD -->
+            {{-- PASSWORD --}}
             <label for="password">Password</label>
 
             <div class="password-wrapper">
@@ -323,7 +332,7 @@
                 </button>
             </div>
 
-            <!-- INGAT SAYA -->
+            {{-- INGAT SAYA --}}
             <label for="remember" class="remember">
                 <input
                     type="checkbox"
@@ -334,14 +343,14 @@
                 Ingat saya
             </label>
 
-            <!-- TOMBOL LOGIN -->
+            {{-- TOMBOL LOGIN --}}
             <button type="submit" class="login-button">
                 Login
             </button>
 
         </form>
 
-        <!-- LINK BAWAH -->
+        {{-- LINK BAWAH --}}
         <div class="footer">
             Belum punya akun?
             <a href="{{ route('register') }}">Daftar di sini</a>
@@ -355,7 +364,7 @@
 
     </main>
 
-    <!-- JAVASCRIPT IKON MATA -->
+    {{-- JAVASCRIPT IKON MATA --}}
     <script>
         const passwordInput = document.getElementById('password');
         const togglePassword = document.getElementById('togglePassword');
@@ -380,7 +389,6 @@
 
             // Ganti ikon mata
             if (isHidden) {
-                // Ikon mata dicoret
                 eyeIcon.innerHTML = `
                     <path d="M3 3l18 18"/>
                     <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8"/>
@@ -388,7 +396,6 @@
                     <path d="M6.2 6.2C3.5 8 2 12 2 12s3.6 7 10 7c1.1 0 2.1-.2 3-.5"/>
                 `;
             } else {
-                // Ikon mata normal
                 eyeIcon.innerHTML = `
                     <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/>
                     <circle cx="12" cy="12" r="3"/>

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PesertaController extends Controller
 {
-    // Menampilkan daftar peserta
+    // Menampilkan daftar peserta yang sudah registrasi
     public function index(Request $request)
     {
         $peserta = User::where('role', 'peserta')
@@ -24,7 +24,12 @@ class PesertaController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('admin.peserta.index', compact('peserta'));
+        $totalPeserta = User::where('role', 'peserta')->count();
+
+        return view('admin.peserta.index', compact(
+            'peserta',
+            'totalPeserta'
+        ));
     }
 
     // Menampilkan detail peserta
@@ -33,7 +38,7 @@ class PesertaController extends Controller
         abort_unless($pesertum->role === 'peserta', 404);
 
         return view('admin.peserta.show', [
-            'peserta' => $pesertum
+            'peserta' => $pesertum,
         ]);
     }
 }

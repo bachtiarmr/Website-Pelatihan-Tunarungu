@@ -129,18 +129,18 @@
         </div>
 
         <div class="card">
-            <form action="{{ route('admin.peserta.index') }}"
-                  method="GET"
-                  class="search">
-                <input
-                    type="text"
-                    name="cari"
-                    placeholder="Cari nama atau email peserta..."
-                    value="{{ request('cari') }}"
-                >
+            <form action="{{ route('admin.peserta.index') }}" method="GET">
+    <input
+        type="search"
+        name="cari"
+        placeholder="Cari nama atau email..."
+        value="{{ request('cari') }}"
+        aria-label="Cari peserta">
 
-                <button type="submit" class="button">Cari</button>
-            </form>
+    <button type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+</form>
 
             <div class="table-wrapper">
                 <table>
