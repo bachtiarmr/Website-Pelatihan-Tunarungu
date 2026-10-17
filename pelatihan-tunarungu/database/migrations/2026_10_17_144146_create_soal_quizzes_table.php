@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -20,7 +21,6 @@ return new class extends Migration
             $table->string('opsi_b');
             $table->string('opsi_c');
             $table->string('opsi_d');
-
             $table->char('jawaban_benar', 1);
             $table->unsignedInteger('nilai')->default(10);
 
