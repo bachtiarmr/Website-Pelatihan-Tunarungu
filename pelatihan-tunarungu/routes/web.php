@@ -3,26 +3,41 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Admin\DashboardController;
+
+// Controller Admin
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\PesertaController;
-use App\Http\Controllers\Admin\MateriController;
+use App\Http\Controllers\Admin\MateriController as AdminMateriController;
 use App\Http\Controllers\Admin\KategoriPelatihanController;
 use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\ProgresController;
 use App\Http\Controllers\Admin\KompetensiController;
 use App\Http\Controllers\Admin\LaporanController;
 
-// ========================================
-// HALAMAN UTAMA
-// ========================================
+// Controller Peserta
+use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
+use App\Http\Controllers\Peserta\MateriController as PesertaMateriController;
+
+
+/*
+|--------------------------------------------------------------------------
+| HALAMAN UTAMA
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-// ========================================
-// REGISTRASI DAN LOGIN
-// ========================================
+
+/*
+|--------------------------------------------------------------------------
+| REGISTRASI DAN LOGIN
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware('guest')->group(function () {
+
     Route::get('/registrasi', [AuthController::class, 'showRegister'])
         ->name('register');
 
@@ -34,37 +49,67 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/login', [AuthController::class, 'login'])
         ->name('login.process');
+
 });
 
-// ========================================
-// LOGOUT
-// ========================================
+
+/*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
+
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// ========================================
-// DASHBOARD PESERTA
-// ========================================
-Route::get('/dashboard', function () {
-    return view('peserta.dashboard');
-})
-    ->middleware(['auth', 'role:peserta'])
-    ->name('dashboard');
 
-// ========================================
-// MENU ADMIN
-// ========================================
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD DAN MATERI PESERTA
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth', 'role:peserta'])->group(function () {
+
+    // Dashboard peserta
+    Route::get('/dashboard', [PesertaDashboardController::class, 'index'])
+        ->name('dashboard');
+
+    // Daftar materi yang sudah dipublikasikan admin
+    Route::get('/materi', [PesertaMateriController::class, 'index'])
+        ->name('peserta.materi.index');
+
+    // Detail materi peserta
+    Route::get('/materi/{materi}', [PesertaMateriController::class, 'show'])
+        ->whereNumber('materi')
+        ->name('peserta.materi.show');
+
+});
+
+
+/*
+|--------------------------------------------------------------------------
+| MENU ADMIN
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
-        // Dashboard
-        Route::get('/', [DashboardController::class, 'index'])
+        // Dashboard admin
+        Route::get('/', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Data peserta
+
+        /*
+        |--------------------------------------------------------------------------
+        | DATA PESERTA
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/peserta', [PesertaController::class, 'index'])
             ->name('peserta.index');
 
@@ -72,10 +117,22 @@ Route::middleware(['auth', 'role:admin'])
             ->whereNumber('pesertum')
             ->name('peserta.show');
 
-        // Kelola materi
-        Route::resource('materi', MateriController::class);
 
-        // Kelola kategori pelatihan
+        /*
+        |--------------------------------------------------------------------------
+        | KELOLA MATERI
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource('materi', AdminMateriController::class);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | KATEGORI PELATIHAN
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/kategori', [KategoriPelatihanController::class, 'index'])
             ->name('kategori.index');
 
@@ -83,31 +140,65 @@ Route::middleware(['auth', 'role:admin'])
             ->name('kategori.store');
 
         Route::delete('/kategori/{kategori}', [KategoriPelatihanController::class, 'destroy'])
+            ->whereNumber('kategori')
             ->name('kategori.destroy');
 
-        // Kelola kuis
+
+        /*
+        |--------------------------------------------------------------------------
+        | KELOLA QUIZ
+        |--------------------------------------------------------------------------
+        */
+
         Route::resource('quiz', QuizController::class)
             ->except(['show']);
 
-        // Progres peserta
+
+        /*
+        |--------------------------------------------------------------------------
+        | PROGRES PESERTA
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/progres', [ProgresController::class, 'index'])
             ->name('progres.index');
 
-        // Kompetensi peserta
+
+        /*
+        |--------------------------------------------------------------------------
+        | KOMPETENSI PESERTA
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/kompetensi', [KompetensiController::class, 'index'])
             ->name('kompetensi.index');
 
-        // Laporan nilai peserta
+
+        /*
+        |--------------------------------------------------------------------------
+        | LAPORAN NILAI
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/laporan', [LaporanController::class, 'index'])
             ->name('laporan.index');
 
-        // Menu pengaturan
+
+        /*
+        |--------------------------------------------------------------------------
+        | PENGATURAN ADMIN
+        |--------------------------------------------------------------------------
+        */
+
         Route::get('/menu/{menu}', function (string $menu) {
+
             abort_unless(
                 in_array($menu, ['pengaturan'], true),
                 404
             );
 
             return view('admin.menu', compact('menu'));
+
         })->name('menu');
+
     });
