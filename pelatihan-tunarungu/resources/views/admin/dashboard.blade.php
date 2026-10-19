@@ -1,4 +1,3 @@
-
 @extends('admin.layout')
 
 @section('title', 'Dashboard Admin - Web Pelatihan')
@@ -22,6 +21,12 @@
         border-radius: 10px;
         background: #fff;
         box-shadow: 0 2px 7px rgba(44, 80, 116, .06);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 14px rgba(44, 80, 116, .10);
     }
 
     .stat-title {
@@ -51,6 +56,7 @@
     .activity-title {
         font-size: 17px;
         font-weight: 700;
+        color: #294866;
         margin-bottom: 16px;
     }
 
@@ -67,9 +73,9 @@
     }
 
     .activity-icon {
-        width: 28px;
-        height: 28px;
-        min-width: 28px;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -90,7 +96,13 @@
         font-size: 11px;
     }
 
-    @media (max-width: 500px) {
+    .empty-activity {
+        color: #91a3b6;
+        font-size: 12px;
+        padding: 12px 0;
+    }
+
+    @media (max-width: 650px) {
         .stats {
             grid-template-columns: 1fr;
         }
@@ -102,41 +114,54 @@
     {{-- TOTAL PESERTA DARI DATABASE --}}
     <div class="stat-card">
         <div class="stat-title">Total Peserta</div>
+
         <div class="stat-content">
             <i class="fa-solid fa-user stat-icon"></i>
-            <span class="stat-number">{{ $totalPeserta }}</span>
+
+            <span class="stat-number">
+                {{ $totalPeserta }}
+            </span>
         </div>
     </div>
 
-    {{-- MATERI TERSEDIA --}}
+    {{-- MATERI TERSEDIA DARI DATABASE --}}
     <div class="stat-card">
         <div class="stat-title">Materi Tersedia</div>
+
         <div class="stat-content">
             <i class="fa-solid fa-book-open stat-icon"></i>
-            <span class="stat-number">12</span>
+
+            <span class="stat-number">
+                {{ $totalMateri }}
+            </span>
         </div>
     </div>
 
-    {{-- PESERTA AKTIF --}}
+    {{-- PESERTA AKTIF: MASIH NILAI CONTOH --}}
     <div class="stat-card">
         <div class="stat-title">Peserta Aktif</div>
+
         <div class="stat-content">
             <i class="fa-solid fa-users stat-icon"></i>
+
             <span class="stat-number">98</span>
         </div>
     </div>
 
-    {{-- KOMPETENSI TERSEDIA --}}
+    {{-- KOMPETENSI: MASIH NILAI CONTOH --}}
     <div class="stat-card">
         <div class="stat-title">Kompetensi Tersedia</div>
+
         <div class="stat-content">
             <i class="fa-solid fa-award stat-icon"></i>
+
             <span class="stat-number">8</span>
         </div>
     </div>
 
 </div>
 
+{{-- AKTIVITAS TERBARU --}}
 <h2 class="activity-title">Aktivitas Terbaru</h2>
 
 <div class="activity-list">
@@ -145,6 +170,7 @@
         <div class="activity-icon">
             <i class="fa-solid fa-user"></i>
         </div>
+
         <div class="activity-text">
             <strong>Peserta baru mendaftar</strong>
             <span class="activity-time">2 menit lalu</span>
@@ -155,6 +181,7 @@
         <div class="activity-icon">
             <i class="fa-solid fa-user"></i>
         </div>
+
         <div class="activity-text">
             <strong>Andi Pratama menyelesaikan materi</strong>
             <span class="activity-time">10 menit lalu</span>
@@ -165,6 +192,7 @@
         <div class="activity-icon">
             <i class="fa-solid fa-circle-check"></i>
         </div>
+
         <div class="activity-text">
             <strong>Quiz Desain Grafis selesai</strong>
             <span class="activity-time">15 menit lalu</span>

@@ -1,100 +1,89 @@
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Peserta</title>
+@extends('admin.layout')
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+@section('title', 'Detail Peserta - Web Pelatihan')
 
-        body {
-            margin: 0;
-            padding: 30px;
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            color: #263248;
-        }
+@section('content')
+<style>
+    .detail-card {
+        max-width: 800px;
+        padding: 25px;
+        background: #fff;
+        border: 1px solid #e1eaf4;
+        border-radius: 12px;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
+    .detail-info {
+        padding: 15px 0;
+        border-bottom: 1px solid #edf0f5;
+    }
 
-        .card {
-            padding: 25px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px #0000000a;
-        }
+    .detail-label {
+        display: block;
+        margin-bottom: 6px;
+        color: #68758a;
+        font-size: 13px;
+    }
 
-        h1 {
-            margin-top: 0;
-        }
+    .detail-value {
+        color: #294866;
+        font-weight: 600;
+    }
 
-        .info {
-            padding: 15px 0;
-            border-bottom: 1px solid #edf0f5;
-        }
+    .btn-back {
+        display: inline-block;
+        margin-top: 22px;
+        padding: 11px 16px;
+        border-radius: 8px;
+        background: #327fc7;
+        color: #fff;
+        text-decoration: none;
+    }
+</style>
 
-        .label {
-            display: block;
-            margin-bottom: 6px;
-            color: #68758a;
-            font-size: 14px;
-        }
+<h1 class="page-title">Detail Peserta</h1>
+<p style="color:#687f96; margin:8px 0 22px;">
+    Informasi akun peserta pelatihan.
+</p>
 
-        .value {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .button {
-            display: inline-block;
-            margin-top: 22px;
-            padding: 11px 16px;
-            border-radius: 8px;
-            background: #2563eb;
-            color: white;
-            text-decoration: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <h1>Detail Peserta</h1>
-            <p>Informasi akun peserta pelatihan.</p>
-
-            <div class="info">
-                <span class="label">ID Peserta</span>
-                <span class="value">{{ $peserta->id }}</span>
-            </div>
-
-            <div class="info">
-                <span class="label">Nama Lengkap</span>
-                <span class="value">{{ $peserta->name }}</span>
-            </div>
-
-            <div class="info">
-                <span class="label">Email</span>
-                <span class="value">{{ $peserta->email }}</span>
-            </div>
-
-            <div class="info">
-                <span class="label">Tanggal Terdaftar</span>
-                <span class="value">
-                    {{ $peserta->created_at?->format('d-m-Y H:i') ?? '-' }}
-                </span>
-            </div>
-
-            <a href="{{ route('admin.peserta.index') }}" class="button">
-                Kembali ke Daftar Peserta
-            </a>
-        </div>
+<div class="detail-card">
+    <div class="detail-info">
+        <span class="detail-label">ID Peserta</span>
+        <span class="detail-value">{{ $peserta->id }}</span>
     </div>
-</body>
-</html>
+
+    <div class="detail-info">
+        <span class="detail-label">Nama Lengkap</span>
+        <span class="detail-value">{{ $peserta->name }}</span>
+    </div>
+
+    <div class="detail-info">
+        <span class="detail-label">Email</span>
+        <span class="detail-value">{{ $peserta->email }}</span>
+    </div>
+
+    <div class="detail-info">
+        <span class="detail-label">Nomor HP</span>
+        <span class="detail-value">{{ $peserta->nomor_hp ?: '-' }}</span>
+    </div>
+
+    <div class="detail-info">
+        <span class="detail-label">Tanggal Terdaftar</span>
+        <span class="detail-value">
+            {{ $peserta->created_at?->format('d-m-Y H:i') ?? '-' }}
+        </span>
+    </div>
+
+    <div class="detail-info">
+        <span class="detail-label">Status Email</span>
+        <span class="detail-value">
+            {{ $peserta->email_verified_at ? 'Terverifikasi' : 'Belum terverifikasi' }}
+        </span>
+    </div>
+
+    <a href="{{ route('admin.peserta.index') }}" class="btn-back">
+        <i class="fa-solid fa-arrow-left"></i>
+        Kembali ke Daftar Peserta
+    </a>
+</div>
+@endsection

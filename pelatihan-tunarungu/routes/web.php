@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\AuthController;
 
 // Controller Admin
@@ -13,10 +12,12 @@ use App\Http\Controllers\Admin\QuizController;
 use App\Http\Controllers\Admin\ProgresController;
 use App\Http\Controllers\Admin\KompetensiController;
 use App\Http\Controllers\Admin\LaporanController;
+use App\Http\Controllers\Admin\PengaturanAkunController as AdminPengaturanAkunController;
 
 // Controller Peserta
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
 use App\Http\Controllers\Peserta\MateriController as PesertaMateriController;
+use App\Http\Controllers\Peserta\PengaturanAkunController as PesertaPengaturanAkunController;
 
 
 /*
@@ -66,24 +67,34 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD DAN MATERI PESERTA
+| DASHBOARD, MATERI, DAN PENGATURAN PESERTA
 |--------------------------------------------------------------------------
 */
 
 Route::middleware(['auth', 'role:peserta'])->group(function () {
 
-    // Dashboard peserta
+    // Dashboard Peserta
     Route::get('/dashboard', [PesertaDashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Daftar materi yang sudah dipublikasikan admin
+    // Materi Peserta
     Route::get('/materi', [PesertaMateriController::class, 'index'])
         ->name('peserta.materi.index');
 
-    // Detail materi peserta
     Route::get('/materi/{materi}', [PesertaMateriController::class, 'show'])
         ->whereNumber('materi')
         ->name('peserta.materi.show');
+
+    // Pengaturan Akun Peserta
+    Route::get('/pengaturan-akun', [
+        PesertaPengaturanAkunController::class,
+        'edit',
+    ])->name('peserta.pengaturan-akun.edit');
+
+    Route::put('/pengaturan-akun', [
+        PesertaPengaturanAkunController::class,
+        'update',
+    ])->name('peserta.pengaturan-akun.update');
 
 });
 
@@ -99,9 +110,26 @@ Route::middleware(['auth', 'role:admin'])
     ->name('admin.')
     ->group(function () {
 
-        // Dashboard admin
+        // Dashboard Admin
         Route::get('/', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PENGATURAN AKUN ADMIN
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get('/pengaturan-akun', [
+            AdminPengaturanAkunController::class,
+            'edit',
+        ])->name('pengaturan-akun.edit');
+
+        Route::put('/pengaturan-akun', [
+            AdminPengaturanAkunController::class,
+            'update',
+        ])->name('pengaturan-akun.update');
 
 
         /*
@@ -139,9 +167,11 @@ Route::middleware(['auth', 'role:admin'])
         Route::post('/kategori', [KategoriPelatihanController::class, 'store'])
             ->name('kategori.store');
 
-        Route::delete('/kategori/{kategori}', [KategoriPelatihanController::class, 'destroy'])
-            ->whereNumber('kategori')
-            ->name('kategori.destroy');
+        Route::delete('/kategori/{kategori}', [
+            KategoriPelatihanController::class,
+            'destroy',
+        ])->whereNumber('kategori')
+          ->name('kategori.destroy');
 
 
         /*
@@ -186,7 +216,7 @@ Route::middleware(['auth', 'role:admin'])
 
         /*
         |--------------------------------------------------------------------------
-        | PENGATURAN ADMIN
+        | MENU ADMIN LAINNYA
         |--------------------------------------------------------------------------
         */
 

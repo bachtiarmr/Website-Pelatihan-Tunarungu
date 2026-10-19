@@ -19,6 +19,7 @@
         color: #2878e8;
         font-size: 15px;
         font-weight: 700;
+        text-decoration: none;
         transition: .2s;
     }
 
@@ -34,8 +35,6 @@
         align-items: start;
     }
 
-    /* MEDIA MATERI */
-
     .materi-player {
         position: relative;
         width: 100%;
@@ -43,7 +42,7 @@
         overflow: hidden;
         border-radius: 16px;
         background: #e8f1ff;
-        border: 1px solid var(--border);
+        border: 1px solid var(--border, #dbe5f1);
         box-shadow: 0 5px 20px rgba(30, 80, 140, .07);
     }
 
@@ -64,7 +63,7 @@
 
     .materi-player > img {
         object-fit: contain;
-        background: rgba(255, 255, 255, .96);
+        background: #fff;
     }
 
     .materi-placeholder {
@@ -74,6 +73,7 @@
         padding: 25px;
         text-align: center;
         background: linear-gradient(135deg, #e3efff, #f8fbff);
+        box-sizing: border-box;
     }
 
     .materi-placeholder-inner {
@@ -88,40 +88,43 @@
         place-items: center;
         border-radius: 22px;
         background: #d5e7ff;
-        color: var(--blue);
+        color: var(--blue, #2878e8);
     }
 
     .materi-placeholder-icon svg {
         width: 40px;
         height: 40px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     .materi-placeholder h2 {
-        margin-bottom: 10px;
-        color: var(--blue-dark);
+        margin: 0 0 10px;
+        color: var(--blue-dark, #153e75);
         font-size: 23px;
         line-height: 1.4;
     }
 
     .materi-placeholder p {
-        color: var(--muted);
+        color: var(--muted, #64748b);
         font-size: 14px;
         line-height: 1.8;
     }
 
-    /* INFORMASI MATERI */
-
     .materi-info {
         margin-top: 20px;
         padding: 28px;
-        background: rgba(255, 255, 255, .94);
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, .96);
+        border: 1px solid var(--border, #dbe5f1);
         border-radius: 16px;
         box-shadow: 0 4px 16px rgba(46, 91, 139, .04);
     }
 
     .materi-title {
-        margin-bottom: 13px;
+        margin: 0 0 13px;
         color: #16386f;
         font-size: clamp(25px, 3vw, 34px);
         font-weight: 800;
@@ -136,7 +139,7 @@
         flex-wrap: wrap;
         gap: 10px;
         margin-bottom: 22px;
-        color: var(--muted);
+        color: var(--muted, #64748b);
         font-size: 14px;
         line-height: 1.7;
     }
@@ -169,21 +172,19 @@
     }
 
     .materi-empty-description {
-        color: var(--muted);
+        color: var(--muted, #64748b);
     }
-
-    /* MATERI LAINNYA */
 
     .materi-related {
         padding: 24px;
-        background: rgba(255, 255, 255, .94);
-        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, .96);
+        border: 1px solid var(--border, #dbe5f1);
         border-radius: 16px;
         box-shadow: 0 4px 16px rgba(46, 91, 139, .04);
     }
 
     .materi-related-heading {
-        margin-bottom: 20px;
+        margin: 0 0 20px;
         color: #16386f;
         font-size: 21px;
         font-weight: 800;
@@ -202,6 +203,7 @@
         gap: 12px;
         padding: 8px;
         border-radius: 11px;
+        text-decoration: none;
         transition: background .2s;
     }
 
@@ -218,7 +220,7 @@
         overflow: hidden;
         border-radius: 9px;
         background: #dceeff;
-        color: var(--blue);
+        color: var(--blue, #2878e8);
     }
 
     .materi-related-thumb img {
@@ -231,6 +233,11 @@
     .materi-related-thumb svg {
         width: 27px;
         height: 27px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 1.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
     }
 
     .materi-related-info {
@@ -239,6 +246,7 @@
     }
 
     .materi-related-title {
+        margin: 0;
         color: #18345d;
         font-size: 13px;
         font-weight: 700;
@@ -247,8 +255,8 @@
     }
 
     .materi-related-category {
-        margin-top: 5px;
-        color: var(--muted);
+        margin: 5px 0 0;
+        color: var(--muted, #64748b);
         font-size: 12px;
         line-height: 1.6;
     }
@@ -267,14 +275,12 @@
     .materi-related-empty {
         padding: 20px 12px;
         text-align: center;
-        color: var(--muted);
+        color: var(--muted, #64748b);
         font-size: 13px;
         line-height: 1.8;
         background: #f6f9ff;
         border-radius: 10px;
     }
-
-    /* RESPONSIVE */
 
     @media (max-width: 1250px) {
         .materi-grid {
@@ -375,33 +381,64 @@
 @section('content')
 
 @php
+    /*
+    |--------------------------------------------------------------------------
+    | Mengambil ID video YouTube
+    |--------------------------------------------------------------------------
+    | Mendukung:
+    | youtube.com/watch?v=ID
+    | youtu.be/ID
+    | youtube.com/embed/ID
+    | youtube.com/shorts/ID
+    | youtube.com/live/ID
+    */
+
     $youtubeId = null;
 
-    if ($materi->video_url) {
-        $parsedUrl = parse_url($materi->video_url);
+    if (!empty($materi->video_url)) {
+        $url = trim($materi->video_url);
+
+        // Menambahkan protokol jika admin memasukkan URL tanpa https://
+        if (!preg_match('~^https?://~i', $url)) {
+            $url = 'https://' . $url;
+        }
+
+        $parsedUrl = parse_url($url);
         $host = strtolower($parsedUrl['host'] ?? '');
         $path = trim($parsedUrl['path'] ?? '', '/');
 
-        if (str_contains($host, 'youtu.be')) {
+        if (
+            $host === 'youtu.be' ||
+            str_ends_with($host, '.youtu.be')
+        ) {
             $youtubeId = explode('/', $path)[0] ?? null;
         } elseif (
-            str_contains($host, 'youtube.com') ||
-            str_contains($host, 'youtube-nocookie.com')
+            $host === 'youtube.com' ||
+            str_ends_with($host, '.youtube.com') ||
+            $host === 'youtube-nocookie.com' ||
+            str_ends_with($host, '.youtube-nocookie.com')
         ) {
             parse_str($parsedUrl['query'] ?? '', $queryParams);
 
             if (!empty($queryParams['v'])) {
                 $youtubeId = $queryParams['v'];
             } elseif (
-                preg_match('~(?:embed|shorts)/([^/?]+)~', $path, $matches)
+                preg_match(
+                    '~(?:embed|shorts|live)/([^/?]+)~',
+                    $path,
+                    $matches
+                )
             ) {
                 $youtubeId = $matches[1];
             }
         }
 
-        if ($youtubeId) {
-            $youtubeId = explode('?', $youtubeId)[0];
-            $youtubeId = explode('&', $youtubeId)[0];
+        // ID YouTube normalnya terdiri dari 11 karakter
+        if (
+            !$youtubeId ||
+            !preg_match('/^[a-zA-Z0-9_-]{11}$/', $youtubeId)
+        ) {
+            $youtubeId = null;
         }
     }
 
@@ -417,7 +454,10 @@
 <div class="materi-detail">
 
     <a href="{{ route('peserta.materi.index') }}" class="materi-back">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true">
             <path d="m15 18-6-6 6-6"/>
             <path d="M9 12h12"/>
         </svg>
@@ -434,7 +474,7 @@
 
                 <div class="materi-player">
                     <iframe
-                        src="https://www.youtube-nocookie.com/embed/{{ $youtubeId }}"
+                        src="https://www.youtube.com/embed/{{ $youtubeId }}"
                         title="{{ $materi->judul }}"
                         loading="lazy"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -443,7 +483,29 @@
                     </iframe>
                 </div>
 
-            {{-- VIDEO UNGGAHAN --}}
+            {{-- JENIS YOUTUBE TETAPI LINK TIDAK VALID --}}
+            @elseif ($materi->jenis === 'youtube')
+
+                <div class="materi-player materi-placeholder">
+                    <div class="materi-placeholder-inner">
+                        <div class="materi-placeholder-icon">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 8v5"/>
+                                <path d="M12 16h.01"/>
+                            </svg>
+                        </div>
+
+                        <h2>Video belum dapat diputar</h2>
+                        <p>
+                            Link YouTube pada materi ini tidak valid.
+                            Silakan hubungi admin untuk memeriksa kembali
+                            link video yang disimpan.
+                        </p>
+                    </div>
+                </div>
+
+            {{-- VIDEO UNGGAHAN ADMIN --}}
             @elseif ($materi->jenis === 'upload_video' && $videoUrl)
 
                 <div class="materi-player">
@@ -471,27 +533,24 @@
 
                 <div class="materi-player materi-placeholder">
                     <div class="materi-placeholder-inner">
-
                         <div class="materi-placeholder-icon">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
                                 <path d="M4 4h16v16H4z"/>
                                 <path d="M8 8h8M8 12h8M8 16h5"/>
                             </svg>
                         </div>
 
                         <h2>Materi Pembelajaran</h2>
-
                         <p>
                             Pelajari materi berikut melalui penjelasan
                             yang tersedia di bawah ini.
                         </p>
-
                     </div>
                 </div>
 
             @endif
 
-            {{-- INFORMASI DAN DESKRIPSI --}}
+            {{-- INFORMASI MATERI --}}
             <div class="materi-info">
 
                 <h1 class="materi-title">
@@ -499,7 +558,6 @@
                 </h1>
 
                 <div class="materi-meta">
-
                     <span>
                         Kategori: {{ $materi->kategori ?: 'Umum' }}
                     </span>
@@ -520,35 +578,27 @@
                                 Teks dan gambar
                         @endswitch
                     </span>
-
                 </div>
 
                 @if ($materi->deskripsi)
-
                     <div class="materi-description">
                         {!! nl2br(e($materi->deskripsi)) !!}
                     </div>
-
                 @else
-
                     <p class="materi-description materi-empty-description">
                         Belum ada deskripsi untuk materi ini.
                         Silakan hubungi pengelola pelatihan jika membutuhkan
                         informasi tambahan.
                     </p>
-
                 @endif
 
             </div>
-
         </section>
 
         {{-- SIDEBAR MATERI LAINNYA --}}
         <aside class="materi-related">
 
-            <h2 class="materi-related-heading">
-                Materi lainnya
-            </h2>
+            <h2 class="materi-related-heading">Materi lainnya</h2>
 
             <div class="materi-related-list">
 
@@ -574,19 +624,19 @@
                                     loading="lazy">
 
                             @elseif (
-                                $item->jenis === 'youtube' ||
-                                $item->jenis === 'upload_video'
+                                in_array($item->jenis, ['youtube', 'upload_video'])
                             )
 
-                                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                                    <polygon points="5 3 19 12 5 21 5 3"
-                                             fill="currentColor"
-                                             stroke="none"/>
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <polygon
+                                        points="5 3 19 12 5 21 5 3"
+                                        fill="currentColor"
+                                        stroke="none"/>
                                 </svg>
 
                             @else
 
-                                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
                                     <path d="M4 4h16v16H4z"/>
                                     <path d="M8 8h8M8 12h8M8 16h5"/>
                                 </svg>
@@ -621,7 +671,6 @@
                             </span>
 
                         </div>
-
                     </a>
 
                 @empty
@@ -633,11 +682,9 @@
                 @endforelse
 
             </div>
-
         </aside>
 
     </div>
-
 </div>
 
 @endsection

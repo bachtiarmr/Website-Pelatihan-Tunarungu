@@ -67,6 +67,10 @@
             flex-shrink: 0;
         }
 
+        /* =========================
+           NAVBAR
+        ========================= */
+
         .topbar {
             min-height: 78px;
             padding: 14px 35px;
@@ -88,6 +92,7 @@
             gap: 13px;
             font-size: 25px;
             font-weight: 800;
+            flex-shrink: 0;
         }
 
         .brand-icon {
@@ -99,12 +104,41 @@
             border-radius: 50%;
         }
 
+        /* =========================
+           PROFILE DROPDOWN
+        ========================= */
+
         .profile {
+            position: relative;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             font-size: 14px;
             font-weight: 600;
+        }
+
+        .profile-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 10px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            transition: background .2s, border-color .2s;
+        }
+
+        .profile-toggle:hover,
+        .profile-toggle[aria-expanded="true"] {
+            background: rgba(255,255,255,.14);
+            border-color: rgba(255,255,255,.2);
+        }
+
+        .profile-toggle:focus-visible {
+            outline: 2px solid white;
+            outline-offset: 3px;
         }
 
         .profile-avatar {
@@ -115,7 +149,135 @@
             display: grid;
             place-items: center;
             border-radius: 50%;
+            flex-shrink: 0;
         }
+
+        .profile-name {
+            max-width: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .profile-chevron {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            transition: transform .2s;
+        }
+
+        .profile-toggle[aria-expanded="true"] .profile-chevron {
+            transform: rotate(180deg);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            width: 270px;
+            padding: 8px;
+            background: #fff;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            box-shadow: 0 12px 35px rgba(22, 56, 111, .18);
+            z-index: 200;
+
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(-8px);
+
+            transition:
+                opacity .18s ease,
+                transform .18s ease,
+                visibility .18s;
+        }
+
+        .profile-dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown-header {
+            padding: 13px 12px;
+            border-bottom: 1px solid #eaf0f9;
+            margin-bottom: 6px;
+        }
+
+        .profile-dropdown-name {
+            display: block;
+            color: #16386f;
+            font-size: 14px;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-dropdown-email {
+            display: block;
+            color: #6480a6;
+            font-size: 12px;
+            margin-top: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .profile-dropdown-link {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            width: 100%;
+            padding: 12px;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: #345477;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+
+        .profile-dropdown-link:hover {
+            background: #edf5ff;
+            color: #1766d1;
+        }
+
+        .profile-dropdown-link:focus-visible {
+            outline: 2px solid #3987f4;
+            outline-offset: -2px;
+        }
+
+        .profile-dropdown-link svg {
+            width: 19px;
+            height: 19px;
+            flex-shrink: 0;
+        }
+
+        .profile-dropdown-divider {
+            height: 1px;
+            background: #eaf0f9;
+            margin: 6px 4px;
+        }
+
+        .profile-dropdown-link.logout-link {
+            color: #d93636;
+        }
+
+        .profile-dropdown-link.logout-link:hover {
+            background: #fff0f0;
+            color: #b42318;
+        }
+
+        .profile-dropdown form {
+            margin: 0;
+        }
+
+        /* =========================
+           LAYOUT
+        ========================= */
 
         .layout {
             display: flex;
@@ -171,6 +333,10 @@
             flex-shrink: 0;
         }
 
+        /* =========================
+           SIDEBAR LOGOUT
+        ========================= */
+
         .sidebar-bottom {
             margin-top: auto;
             padding-top: 22px;
@@ -193,6 +359,10 @@
             background: #fff0f0;
             color: #d93636;
         }
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
 
         .main {
             flex: 1;
@@ -334,6 +504,10 @@
             line-height: 1.7;
         }
 
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
         @media (max-width: 1100px) {
             .sidebar {
                 width: 245px;
@@ -365,13 +539,22 @@
             }
 
             .profile {
-                gap: 7px;
-                font-size: 12px;
+                gap: 0;
+            }
+
+            .profile-toggle {
+                gap: 6px;
+                padding: 4px;
             }
 
             .profile-avatar {
-                width: 34px;
-                height: 34px;
+                width: 36px;
+                height: 36px;
+            }
+
+            .profile-name {
+                max-width: 95px;
+                font-size: 12px;
             }
 
             .layout {
@@ -433,11 +616,25 @@
             .panel {
                 padding: 17px;
             }
+
+            .profile-dropdown {
+                width: min(270px, calc(100vw - 24px));
+                right: 0;
+                top: calc(100% + 10px);
+            }
         }
 
         @media (max-width: 400px) {
             .brand {
                 font-size: 16px;
+            }
+
+            .profile-name {
+                display: none;
+            }
+
+            .profile-toggle {
+                gap: 4px;
             }
         }
     </style>
@@ -448,6 +645,7 @@
 <body>
 
 <header class="topbar">
+
     <a href="{{ route('dashboard') }}" class="brand">
         <span class="brand-icon">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -455,132 +653,242 @@
                 <path d="M6 12v5c3 3 9 3 12 0v-5"/>
             </svg>
         </span>
-        <span>Web Pelatihan</span>
+
+        <span>E-Training.</span>
     </a>
 
+    {{-- DROPDOWN PROFIL PESERTA --}}
     <div class="profile">
-        <div class="profile-avatar">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
-                <circle cx="12" cy="7" r="4"/>
-            </svg>
-        </div>
 
-        <span>{{ auth()->user()->name }}</span>
+        <button
+            type="button"
+            class="profile-toggle"
+            id="profileToggle"
+            aria-expanded="false"
+            aria-controls="profileMenu"
+            aria-label="Buka menu profil"
+        >
+            <span class="profile-avatar">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </span>
+
+            <span class="profile-name">
+                {{ auth()->user()->name }}
+            </span>
+
+            <svg
+                class="profile-chevron"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <polyline points="6 9 12 15 18 9"/>
+            </svg>
+        </button>
+
+        <div
+            class="profile-dropdown"
+            id="profileMenu"
+            aria-label="Menu profil"
+        >
+
+            <div class="profile-dropdown-header">
+                <span class="profile-dropdown-name">
+                    {{ auth()->user()->name }}
+                </span>
+
+                <span class="profile-dropdown-email">
+                    {{ auth()->user()->email }}
+                </span>
+            </div>
+
+            <a
+                href="{{ route('peserta.pengaturan-akun.edit') }}"
+                class="profile-dropdown-link"
+            >
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                >
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+                </svg>
+
+                <span>Pengaturan Akun</span>
+            </a>
+
+            <div class="profile-dropdown-divider"></div>
+
+            <form
+                action="{{ route('logout') }}"
+                method="POST"
+                onsubmit="return confirm('Apakah kamu yakin ingin logout?')"
+            >
+                @csrf
+
+                <button
+                    type="submit"
+                    class="profile-dropdown-link logout-link"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" x2="9" y1="12" y2="12"/>
+                    </svg>
+
+                    <span>Logout</span>
+                </button>
+            </form>
+
+        </div>
     </div>
+
 </header>
 
 <div class="layout">
 
     <aside class="sidebar">
+
         <nav class="nav-menu">
 
-            <a href="{{ route('dashboard') }}"
-               class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            {{-- BERANDA --}}
+            <a
+                href="{{ route('dashboard') }}"
+                class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+            >
                 <span class="nav-icon">
-                    <svg class="icon" viewBox="0 0 24 24">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                         <polyline points="9 22 9 12 15 12 15 22"/>
                     </svg>
                 </span>
+
                 <span>Beranda</span>
             </a>
 
-            <a href="{{ route('peserta.materi.index') }}"
-               class="nav-link {{ request()->routeIs('peserta.materi.*') ? 'active' : '' }}">
+            {{-- MATERI --}}
+            <a
+                href="{{ route('peserta.materi.index') }}"
+                class="nav-link {{ request()->routeIs('peserta.materi.*') ? 'active' : '' }}"
+            >
                 <span class="nav-icon">
-                    <svg class="icon" viewBox="0 0 24 24">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
                         <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
                     </svg>
                 </span>
+
                 <span>Materi</span>
             </a>
 
-            <a href="{{ url('/evaluasi') }}"
-               class="nav-link {{ request()->is('evaluasi*') ? 'active' : '' }}">
+            {{-- EVALUASI --}}
+            <a
+                href="{{ url('/evaluasi') }}"
+                class="nav-link {{ request()->is('evaluasi*') ? 'active' : '' }}"
+            >
                 <span class="nav-icon">
-                    <svg class="icon" viewBox="0 0 24 24">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                         <rect width="8" height="4" x="8" y="2" rx="1"/>
                         <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
                         <path d="m9 14 2 2 4-4"/>
                     </svg>
                 </span>
+
                 <span>Evaluasi</span>
             </a>
 
-            <a href="{{ url('/progres') }}"
-               class="nav-link {{ request()->is('progres*') ? 'active' : '' }}">
+            {{-- PROGRES --}}
+            <a
+                href="{{ url('/progres') }}"
+                class="nav-link {{ request()->is('progres*') ? 'active' : '' }}"
+            >
                 <span class="nav-icon">
-                    <svg class="icon" viewBox="0 0 24 24">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M3 3v18h18"/>
                         <path d="M18 17V9M13 17V5M8 17v-3"/>
                     </svg>
                 </span>
+
                 <span>Progres</span>
             </a>
 
-            <a href="{{ url('/riwayat') }}"
-               class="nav-link {{ request()->is('riwayat*') ? 'active' : '' }}">
+            {{-- RIWAYAT --}}
+            <a
+                href="{{ url('/riwayat') }}"
+                class="nav-link {{ request()->is('riwayat*') ? 'active' : '' }}"
+            >
                 <span class="nav-icon">
-                    <svg class="icon" viewBox="0 0 24 24">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
                         <path d="M3 3v5h5M12 7v5l4 2"/>
                     </svg>
                 </span>
+
                 <span>Riwayat</span>
             </a>
 
-            <a href="{{ url('/kompetensi') }}"
-               class="nav-link {{ request()->is('kompetensi*') ? 'active' : '' }}">
+            {{-- KOMPETENSI --}}
+            <a
+                href="{{ url('/kompetensi') }}"
+                class="nav-link {{ request()->is('kompetensi*') ? 'active' : '' }}"
+            >
                 <span class="nav-icon">
-                    <svg class="icon" viewBox="0 0 24 24">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
                         <circle cx="12" cy="8" r="6"/>
                         <path d="m15.477 12.89 1.523 9.11-5-3-5 3 1.523-9.11"/>
                     </svg>
                 </span>
+
                 <span>Kompetensi</span>
             </a>
 
         </nav>
 
-        <div class="sidebar-bottom">
-            <form action="{{ route('logout') }}" method="POST"
-                  class="logout-form"
-                  onsubmit="return confirm('Apakah kamu yakin ingin logout?')">
-                @csrf
+       
 
-                <button type="submit" class="nav-link logout-button">
-                    <span class="nav-icon">
-                        <svg class="icon" viewBox="0 0 24 24">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                            <polyline points="16 17 21 12 16 7"/>
-                            <line x1="21" x2="9" y1="12" y2="12"/>
-                        </svg>
-                    </span>
-                    <span>Logout</span>
-                </button>
-            </form>
-        </div>
     </aside>
 
     <main class="main">
 
+        {{-- NOTIFIKASI BERHASIL --}}
         @if (session('success'))
             <div class="notice success" role="status">
                 {{ session('success') }}
             </div>
         @endif
 
+        {{-- NOTIFIKASI ERROR --}}
         @if (session('error'))
             <div class="notice error" role="alert">
                 {{ session('error') }}
             </div>
         @endif
 
+        {{-- VALIDASI FORM --}}
         @if ($errors->any())
             <div class="notice error" role="alert">
                 <strong>Periksa kembali data yang dimasukkan:</strong>
+
                 <ul style="margin: 8px 0 0 20px;">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -589,12 +897,69 @@
             </div>
         @endif
 
+        {{-- ISI HALAMAN --}}
         @yield('content')
 
     </main>
+
 </div>
 
 @stack('scripts')
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const toggle = document.getElementById('profileToggle');
+    const menu = document.getElementById('profileMenu');
+
+    if (!toggle || !menu) {
+        return;
+    }
+
+    function openMenu() {
+        menu.classList.add('show');
+        toggle.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeMenu() {
+        menu.classList.remove('show');
+        toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function isOpen() {
+        return menu.classList.contains('show');
+    }
+
+    toggle.addEventListener('click', function (event) {
+        event.stopPropagation();
+
+        if (isOpen()) {
+            closeMenu();
+        } else {
+            openMenu();
+        }
+    });
+
+    menu.addEventListener('click', function (event) {
+        event.stopPropagation();
+    });
+
+    document.addEventListener('click', function (event) {
+        if (
+            !toggle.contains(event.target) &&
+            !menu.contains(event.target)
+        ) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && isOpen()) {
+            closeMenu();
+            toggle.focus();
+        }
+    });
+});
+</script>
 
 </body>
 </html>
