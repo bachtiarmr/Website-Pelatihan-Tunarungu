@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\PengaturanAkunController as AdminPengaturanAkunCo
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
 use App\Http\Controllers\Peserta\MateriController as PesertaMateriController;
 use App\Http\Controllers\Peserta\PengaturanAkunController as PesertaPengaturanAkunController;
+use App\Http\Controllers\Peserta\EvaluasiController as PesertaEvaluasiController; // <-- TAMBAHAN BARU
 
 
 /*
@@ -67,7 +68,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD, MATERI, DAN PENGATURAN PESERTA
+| DASHBOARD, MATERI, EVALUASI, DAN PENGATURAN PESERTA
 |--------------------------------------------------------------------------
 */
 
@@ -84,6 +85,20 @@ Route::middleware(['auth', 'role:peserta'])->group(function () {
     Route::get('/materi/{materi}', [PesertaMateriController::class, 'show'])
         ->whereNumber('materi')
         ->name('peserta.materi.show');
+
+    // ==========================================
+    // TAMBAHAN: EVALUASI PESERTA
+    // ==========================================
+
+    /// Di dalam middleware role:peserta
+    Route::get('/evaluasi', [PesertaEvaluasiController::class, 'index'])
+        ->name('peserta.evaluasi.index');
+
+    Route::get('/evaluasi/{evaluasi}/kerjakan', [PesertaEvaluasiController::class, 'show'])
+        ->whereNumber('evaluasi')
+        ->name('peserta.evaluasi.show');
+
+    // ==========================================
 
     // Pengaturan Akun Peserta
     Route::get('/pengaturan-akun', [
@@ -171,7 +186,7 @@ Route::middleware(['auth', 'role:admin'])
             KategoriPelatihanController::class,
             'destroy',
         ])->whereNumber('kategori')
-          ->name('kategori.destroy');
+            ->name('kategori.destroy');
 
 
         /*
