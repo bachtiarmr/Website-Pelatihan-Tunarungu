@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class HasilQuiz extends Model
 {
+    use HasFactory;
+
     protected $table = 'hasil_quizzes';
 
     protected $fillable = [
@@ -18,18 +21,15 @@ class HasilQuiz extends Model
         'dikerjakan_pada',
     ];
 
-    protected $casts = [
-        'dikerjakan_pada' => 'datetime',
-        'nilai' => 'decimal:2',
-    ];
-
-    public function quiz()
-    {
-        return $this->belongsTo(Quiz::class, 'quiz_id');
-    }
-
+    // Relasi ke User
     public function peserta()
     {
         return $this->belongsTo(User::class, 'peserta_id');
+    }
+
+    // Relasi ke Quiz
+    public function quiz()
+    {
+        return $this->belongsTo(Quiz::class);
     }
 }

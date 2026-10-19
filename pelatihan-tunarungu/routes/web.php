@@ -3,22 +3,23 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
-// Controller Admin
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\PesertaController;
-use App\Http\Controllers\Admin\MateriController as AdminMateriController;
-use App\Http\Controllers\Admin\KategoriPelatihanController;
-use App\Http\Controllers\Admin\QuizController;
-use App\Http\Controllers\Admin\ProgresController;
-use App\Http\Controllers\Admin\KompetensiController;
-use App\Http\Controllers\Admin\LaporanController;
-use App\Http\Controllers\Admin\PengaturanAkunController as AdminPengaturanAkunController;
+// Controller Admin (Perhatikan huruf kecil 'admin' sesuai folder Anda)
+use App\Http\Controllers\admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\admin\PesertaController;
+use App\Http\Controllers\admin\MateriController as AdminMateriController;
+use App\Http\Controllers\admin\KategoriPelatihanController;
+use App\Http\Controllers\admin\QuizController;
+use App\Http\Controllers\admin\SoalController; // <-- TAMBAHKAN INI
+use App\Http\Controllers\admin\ProgresController;
+use App\Http\Controllers\admin\KompetensiController;
+use App\Http\Controllers\admin\LaporanController;
+use App\Http\Controllers\admin\PengaturanAkunController as AdminPengaturanAkunController;
 
 // Controller Peserta
 use App\Http\Controllers\Peserta\DashboardController as PesertaDashboardController;
 use App\Http\Controllers\Peserta\MateriController as PesertaMateriController;
 use App\Http\Controllers\Peserta\PengaturanAkunController as PesertaPengaturanAkunController;
-use App\Http\Controllers\Peserta\EvaluasiController as PesertaEvaluasiController; // <-- TAMBAHAN BARU
+use App\Http\Controllers\Peserta\EvaluasiController as PesertaEvaluasiController;
 
 
 /*
@@ -87,18 +88,20 @@ Route::middleware(['auth', 'role:peserta'])->group(function () {
         ->name('peserta.materi.show');
 
     // ==========================================
-    // TAMBAHAN: EVALUASI PESERTA
+    // EVALUASI PESERTA
     // ==========================================
-
-    /// Di dalam middleware role:peserta
+    
     Route::get('/evaluasi', [PesertaEvaluasiController::class, 'index'])
         ->name('peserta.evaluasi.index');
 
-    Route::get('/evaluasi/{evaluasi}/kerjakan', [PesertaEvaluasiController::class, 'show'])
-        ->whereNumber('evaluasi')
-        ->name('peserta.evaluasi.show');
+    Route::get('/evaluasi/{quiz}/kerjakan', [PesertaEvaluasiController::class, 'kerjakan'])
+        ->whereNumber('quiz')
+        ->name('peserta.evaluasi.kerjakan');
 
-    // ==========================================
+    Route::post('/evaluasi/{quiz}/submit', [PesertaEvaluasiController::class, 'submit'])
+        ->whereNumber('quiz')
+        ->name('peserta.evaluasi.submit');
+
 
     // Pengaturan Akun Peserta
     Route::get('/pengaturan-akun', [
@@ -191,12 +194,18 @@ Route::middleware(['auth', 'role:admin'])
 
         /*
         |--------------------------------------------------------------------------
-        | KELOLA QUIZ
+        | KELOLA QUIZ & SOAL
         |--------------------------------------------------------------------------
         */
 
+        // Route bawaan CRUD Quiz
         Route::resource('quiz', QuizController::class)
             ->except(['show']);
+
+        // PERBAIKAN: Route Kelola Soal diarahkan ke SoalController
+        Route::get('/quiz/{quiz}/soal', [SoalController::class, 'index'])->name('quiz.soal.index');
+        Route::get('/quiz/{quiz}/soal/create', [SoalController::class, 'create'])->name('quiz.soal.create');
+        Route::post('/quiz/{quiz}/soal', [SoalController::class, 'store'])->name('quiz.soal.store');
 
 
         /*

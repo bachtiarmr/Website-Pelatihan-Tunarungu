@@ -38,14 +38,21 @@ class QuizController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi data (termasuk bisa_diulang)
         $data = $request->validate([
             'judul' => ['required', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
             'materi_id' => ['nullable', 'exists:materi,id'],
             'status' => ['required', Rule::in(['draft', 'aktif'])],
+            'durasi_menit' => ['required', 'integer', 'min:1'], 
+            'bisa_diulang' => ['boolean'], // <-- TAMBAHAN
         ]);
 
-        $quiz = Quiz::create($data);
+        // Konversi checkbox menjadi boolean (jika dicentang = true, jika tidak = false)
+        $data['bisa_diulang'] = $request->has('bisa_diulang');
+
+        // Simpan ke database
+        Quiz::create($data);
 
         return redirect()
             ->route('admin.quiz.index')
@@ -58,7 +65,6 @@ class QuizController extends Controller
     public function edit(Quiz $quiz)
     {
         $quiz->load('soal');
-
         $materi = Materi::orderBy('judul')->get();
 
         return view('admin.quiz.edit', compact('quiz', 'materi'));
@@ -69,13 +75,20 @@ class QuizController extends Controller
      */
     public function update(Request $request, Quiz $quiz)
     {
+        // Validasi data
         $data = $request->validate([
             'judul' => ['required', 'string', 'max:255'],
             'deskripsi' => ['nullable', 'string'],
             'materi_id' => ['nullable', 'exists:materi,id'],
             'status' => ['required', Rule::in(['draft', 'aktif'])],
+            'durasi_menit' => ['required', 'integer', 'min:1'], 
+            'bisa_diulang' => ['boolean'], // <-- TAMBAHAN
         ]);
 
+        // Konversi checkbox menjadi boolean
+        $data['bisa_diulang'] = $request->has('bisa_diulang');
+
+        // Update database
         $quiz->update($data);
 
         return redirect()

@@ -100,12 +100,21 @@
                                     </td>
 
                                     <td class="text-center text-nowrap">
+                                        {{-- TOMBOL BARU: Kelola Soal --}}
+                                        <a href="{{ route('admin.quiz.soal.index', $quiz->id) }}"
+                                           class="btn btn-info btn-sm text-white me-1">
+                                            <i class="fa-solid fa-list-check me-1"></i>
+                                            Soal
+                                        </a>
+
+                                        {{-- Tombol Edit --}}
                                         <a href="{{ route('admin.quiz.edit', $quiz) }}"
                                            class="btn btn-warning btn-sm">
                                             <i class="fa-solid fa-pen-to-square me-1"></i>
                                             Edit
                                         </a>
 
+                                        {{-- Tombol Hapus --}}
                                         <form action="{{ route('admin.quiz.destroy', $quiz) }}"
                                               method="POST"
                                               class="d-inline"
